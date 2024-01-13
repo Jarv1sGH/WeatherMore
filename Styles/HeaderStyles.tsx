@@ -3,9 +3,10 @@ export const styles = StyleSheet.create({
   Header: {
     backgroundColor: '#E1D3FA',
     // height: '15%',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   searchContainer: {
-    // borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -24,6 +25,7 @@ export const styles = StyleSheet.create({
   searchInput: {
     width: '90%',
     color: '#FFFAF0',
+  
   },
   forecastButtonsWrapper: {
     width: '92%',
