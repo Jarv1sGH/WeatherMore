@@ -15,9 +15,9 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <StatusBar backgroundColor={'#E1D3FA'} barStyle={'dark-content'} />
+      <Header />
       <ScrollView>
         <View style={styles.mainContainer}>
-          <Header />
           <Weather />
         </View>
       </ScrollView>

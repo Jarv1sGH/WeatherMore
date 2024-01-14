@@ -1,6 +1,6 @@
-import {Text, View} from 'react-native';
+import {Text, View, Image} from 'react-native';
 import React from 'react';
-import {styles} from '../Styles/ForecastStyles';
+import {styles} from '../Styles/WeatherStyles';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -8,22 +8,22 @@ import {
   faDroplet,
   faGauge,
   faSmog,
-  faSun,
   faSunPlantWilt,
   faWater,
   faWind,
 } from '@fortawesome/free-solid-svg-icons';
 import WeatherDetailCard from './Cards/WeatherDetailCard';
+import HourlyForecast from './Cards/HourlyForecast';
 
-// type weatherDataArrType = [
-//   {
-//     name: string;
-//     value: string;
-//     icon: IconProp;
-//   },
-// ];
+type weatherDataType = {
+  name: string;
+  value: string;
+  icon: IconProp;
+};
+
 export default function Weather() {
-  const weatherDetailCardData = [
+  // Array to map weather detail cards
+  const weatherDetailCardData: Array<weatherDataType> = [
     {
       name: 'Wind Speed',
       value: '12 kmph',
@@ -75,7 +75,10 @@ export default function Weather() {
             </View>
 
             <View style={styles.icon}>
-              <FontAwesomeIcon icon={faSmog} size={70} />
+              <Image
+                style={styles.weatherIcon}
+                source={require('./../assets/icons/d320.png')}
+              />
               <Text>Rain</Text>
             </View>
           </View>
@@ -91,6 +94,9 @@ export default function Weather() {
             value={item.value}
           />
         ))}
+      </View>
+      <View>
+        <HourlyForecast />
       </View>
     </View>
   );
