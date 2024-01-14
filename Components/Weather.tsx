@@ -7,13 +7,13 @@ import {
   faCloudRain,
   faDroplet,
   faGauge,
-  faSmog,
   faSunPlantWilt,
   faWater,
   faWind,
 } from '@fortawesome/free-solid-svg-icons';
 import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
+import DayForecast from './Cards/WeekForecast';
 
 type weatherDataType = {
   name: string;
@@ -97,6 +97,7 @@ export default function Weather() {
       </View>
       <View>
         <HourlyForecast />
+        <DayForecast />
       </View>
     </View>
   );

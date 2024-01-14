@@ -20,7 +20,7 @@ const HourlyForecast = () => {
             source={require('../../assets/icons/d320.png')}
             style={styles.weatherIcons}
           />
-          <Text style={[styles.hourTempText, {fontSize: 20}]}>8°</Text>
+          <Text style={[styles.hourTempText, {fontSize: 18}]}>8°</Text>
         </View>
         <View style={styles.hourTempsContainer}>
           <Text style={[styles.hourTempText]}>1 am</Text>

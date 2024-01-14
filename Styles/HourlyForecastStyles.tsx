@@ -17,6 +17,11 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#E1D3FA',
   },
+  DayContainer: {
+    marginTop: 10,
+    height: 240,
+    marginBottom: 100, // Remove this
+  },
   hourlyTempsWrapper: {
     flexDirection: 'row',
     // borderWidth: 2,
@@ -56,5 +61,11 @@ export const styles = StyleSheet.create({
   iconWrapper: {
     ...iconWrapper,
     marginLeft: 8,
+  },
+  lineChartWrapper: {
+    // borderWidth: 2,
+    alignItems: 'center',
+    paddingBottom: 5,
+    flex: 1,
   },
 });

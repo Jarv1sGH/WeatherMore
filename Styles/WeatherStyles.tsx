@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
   },
   weatherOuter: {
-    height: 900,
+    // height: 900,
   },
   weatherIcon: {
     width: 85,
