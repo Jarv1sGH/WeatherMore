@@ -2,14 +2,15 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   Header: {
     backgroundColor: '#E1D3FA',
-    // height: '15%',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
   searchContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   searchInputWrapper: {
     margin: 5,
     flexDirection: 'row',
@@ -23,13 +24,12 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   searchInput: {
-    width: '90%',
+    width: '85%',
+    marginLeft: 4,
     color: '#FFFAF0',
-  
   },
   forecastButtonsWrapper: {
     width: '92%',
-    // borderWidth: 2,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
@@ -51,5 +51,4 @@ export const styles = StyleSheet.create({
   optionText: {
     fontWeight: '600',
   },
-  
 });

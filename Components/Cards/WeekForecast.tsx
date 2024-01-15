@@ -18,8 +18,10 @@ const WeekForecast = () => {
   };
   const chartConfig = {
     backgroundColor: '#E1D3FA',
+    backgroundGradientFromOpacity: 0,
     backgroundGradientFrom: '#E1D3FA',
     backgroundGradientTo: '#E1D3FA',
+    backgroundGradientToOpacity: 0,
     color: (opacity = 1) => `rgba(128, 0, 128, ${opacity})`,
     labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
     propsForDots: {
@@ -30,8 +32,8 @@ const WeekForecast = () => {
     style: {
       borderRadius: 16,
     },
-    // yLabels: yValues,
     decimalPlaces: 0,
+
   };
 
   return (

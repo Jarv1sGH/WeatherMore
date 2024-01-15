@@ -8,37 +8,32 @@ export const styles = StyleSheet.create({
   textWidth: {
     fontWeight: '400',
   },
-  weatherOuter: {
-    // height: 900,
-  },
+  weatherOuter: {},
   weatherIcon: {
     width: 85,
     height: 85,
   },
   weatherContainer: {
     height: 330,
-    // borderWidth: 2,
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
-    // backgroundColor: '#E1D3FA',
   },
   weatherDetails: {
-    // borderWidth: 2,
     width: '95%',
     alignSelf: 'center',
     padding: 8,
   },
   lastUpdateTime: {
-    // padding: 5,
-    // fontWeight: '500',
     marginTop: 8,
   },
   tempWrapper: {
     display: 'flex',
-    // borderWidth: 2,
     marginTop: 5,
-    // width: 120,
     flexDirection: 'row',
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   unit: {
     fontSize: 40,
@@ -59,14 +54,12 @@ export const styles = StyleSheet.create({
     maxWidth: 160,
   },
   weatherDetailCardsWrapper: {
-    // borderWidth: 2,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // marginTop: 10,
     justifyContent: 'center',
   },
   weatherDetailCard: {
-    // borderWidth: 2,
+    opacity: 0.75,
     flexDirection: 'row',
     borderRadius: 10,
     width: 150,
@@ -80,7 +73,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   weatherDetailCardInner: {
-    // borderWidth: 2,
     alignItems: 'center',
     width: '65%',
   },

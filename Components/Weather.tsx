@@ -1,4 +1,4 @@
-import {Text, View, Image} from 'react-native';
+import {Text, View, Image, ImageBackground} from 'react-native';
 import React from 'react';
 import {styles} from '../Styles/WeatherStyles';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
@@ -14,6 +14,7 @@ import {
 import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
 import DayForecast from './Cards/WeekForecast';
+import RainChance from './Cards/RainChanceCard';
 
 type weatherDataType = {
   name: string;
@@ -58,47 +59,56 @@ export default function Weather() {
 
   return (
     <View style={styles.weatherOuter}>
-      <View style={styles.weatherContainer}>
-        <View style={styles.weatherDetails}>
-          <Text style={[styles.lastUpdateTime, styles.textColor]}>
-            January 13, 02:17
-          </Text>
-          <View style={styles.tempWrapper}>
-            <View>
-              <View style={styles.tempInnerWrapper}>
-                <Text style={[styles.temperature, styles.textColor]}>13</Text>
-                <Text style={[styles.unit, styles.textColor]}>°C</Text>
-              </View>
-              <Text style={[styles.textColor, styles.textWidth]}>
-                Feels like 11°
+      <ImageBackground
+        source={require('./../assets/bcg/bcg.jpg')} // Replace with the path to your image
+        style={styles.backgroundImage}>
+        <View>
+          <View style={styles.weatherContainer}>
+            <View style={styles.weatherDetails}>
+              <Text style={[styles.lastUpdateTime, styles.textColor]}>
+                January 13, 02:17
               </Text>
-            </View>
+              <View style={styles.tempWrapper}>
+                <View>
+                  <View style={styles.tempInnerWrapper}>
+                    <Text style={[styles.temperature, styles.textColor]}>
+                      13
+                    </Text>
+                    <Text style={[styles.unit, styles.textColor]}>°C</Text>
+                  </View>
+                  <Text style={[styles.textColor, styles.textWidth]}>
+                    Feels like 11°
+                  </Text>
+                </View>
 
-            <View style={styles.icon}>
-              <Image
-                style={styles.weatherIcon}
-                source={require('./../assets/icons/d320.png')}
-              />
-              <Text>Rain</Text>
+                <View style={styles.icon}>
+                  <Image
+                    style={styles.weatherIcon}
+                    source={require('./../assets/icons/d320.png')}
+                  />
+                  <Text>Rain</Text>
+                </View>
+              </View>
             </View>
           </View>
+          <View style={styles.weatherDetailCardsWrapper}>
+            {weatherDetailCardData.map(item => (
+              <WeatherDetailCard
+                key={item.name}
+                icon={item.icon}
+                name={item.name}
+                value={item.value}
+              />
+            ))}
+          </View>
+          <View style={{marginBottom: 6}}>
+            <HourlyForecast />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.weatherDetailCardsWrapper}>
-        {weatherDetailCardData.map(item => (
-          <WeatherDetailCard
-            key={item.name}
-            icon={item.icon}
-            name={item.name}
-            value={item.value}
-          />
-        ))}
-      </View>
-      <View>
-        <HourlyForecast />
+        <RainChance />
         <DayForecast />
-      </View>
+      </ImageBackground>
     </View>
   );
 }

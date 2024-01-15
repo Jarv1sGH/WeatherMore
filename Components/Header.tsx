@@ -1,14 +1,18 @@
 import {Text, View, TextInput, Pressable} from 'react-native';
 import React, {useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faBars, faCog, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {styles} from '../Styles/HeaderStyles';
+
 export default function Header() {
   const [selctedForecast, setselctedForecast] = useState('today');
   return (
     <View style={styles.Header}>
       <View style={styles.searchContainer}>
         <View style={styles.searchInputWrapper}>
+          <Pressable>
+            <FontAwesomeIcon icon={faBars} size={20} />
+          </Pressable>
           <TextInput
             style={styles.searchInput}
             placeholder="Type here..."
@@ -16,7 +20,7 @@ export default function Header() {
             value={'New delhi'}
           />
           <Pressable>
-            <FontAwesomeIcon icon={faSearch} size={25} />
+            <FontAwesomeIcon icon={faSearch} size={20} />
           </Pressable>
         </View>
       </View>

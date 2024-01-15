@@ -16,15 +16,19 @@ export const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     backgroundColor: '#E1D3FA',
+    opacity: 0.75,
   },
   DayContainer: {
     marginTop: 10,
     height: 240,
-    marginBottom: 100, // Remove this
+    marginBottom: 20,
+  },
+  RainChanceContainer: {
+    marginTop: 10,
+    height: 180,
   },
   hourlyTempsWrapper: {
     flexDirection: 'row',
-    // borderWidth: 2,
     flex: 2,
     padding: 5,
   },
@@ -32,9 +36,7 @@ export const styles = StyleSheet.create({
     margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    // borderWidth: 1,
     width: 48,
-    // marginTop: 10,
   },
   hourTempText: {
     fontSize: 14,
@@ -63,7 +65,6 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
   },
   lineChartWrapper: {
-    // borderWidth: 2,
     alignItems: 'center',
     paddingBottom: 5,
     flex: 1,
