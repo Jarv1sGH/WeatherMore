@@ -1,11 +1,17 @@
 import {Text, View, TextInput, Pressable} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faBars, faCog, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faBars, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {styles} from '../Styles/HeaderStyles';
+// import {useDispatch, useSelector} from 'react-redux';
+import {setSelectedForecast} from '../ReduxToolkit/Reducers/reducers';
+import {useAppSelector, useAppDispatch} from '../ReduxToolkit/hooks';
 
 export default function Header() {
-  const [selctedForecast, setselctedForecast] = useState('today');
+  const dispatch = useAppDispatch();
+  const selectedForecast = useAppSelector(
+    state => state.selectedComponentReducer.selectedForecast,
+  );
   return (
     <View style={styles.Header}>
       <View style={styles.searchContainer}>
@@ -26,23 +32,32 @@ export default function Header() {
       </View>
       <View style={styles.forecastButtonsWrapper}>
         <Pressable
+          onPress={() => {
+            dispatch(setSelectedForecast('today'));
+          }}
           style={[
             styles.forecastButtons,
-            selctedForecast === 'today' && styles.selectedOption,
+            selectedForecast === 'today' && styles.selectedOption,
           ]}>
           <Text style={styles.optionText}>Today</Text>
         </Pressable>
         <Pressable
+          onPress={() => {
+            dispatch(setSelectedForecast('tomorrow'));
+          }}
           style={[
             styles.forecastButtons,
-            selctedForecast === 'tommorow' && styles.selectedOption,
+            selectedForecast === 'tomorrow' && styles.selectedOption,
           ]}>
           <Text style={styles.optionText}>Tommorow</Text>
         </Pressable>
         <Pressable
+          onPress={() => {
+            dispatch(setSelectedForecast('daily'));
+          }}
           style={[
             styles.forecastButtons,
-            selctedForecast === 'daily' && styles.selectedOption,
+            selectedForecast === 'daily' && styles.selectedOption,
           ]}>
           <Text style={styles.optionText}>10 days</Text>
         </Pressable>

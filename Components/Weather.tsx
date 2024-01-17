@@ -2,7 +2,6 @@ import {Text, View, Image, ImageBackground} from 'react-native';
 import React from 'react';
 import {styles} from '../Styles/WeatherStyles';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faCloudRain,
   faDroplet,
@@ -15,6 +14,11 @@ import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
 import DayForecast from './Cards/WeekForecast';
 import RainChance from './Cards/RainChanceCard';
+
+const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
+const HourlyForecastMemoized = React.memo(HourlyForecast);
+const RainChanceMemoized = React.memo(RainChance);
+const DayForecastMemoized = React.memo(DayForecast);
 
 type weatherDataType = {
   name: string;
@@ -93,7 +97,7 @@ export default function Weather() {
           </View>
           <View style={styles.weatherDetailCardsWrapper}>
             {weatherDetailCardData.map(item => (
-              <WeatherDetailCard
+              <WeatherDetailCardMemoized
                 key={item.name}
                 icon={item.icon}
                 name={item.name}
@@ -101,13 +105,13 @@ export default function Weather() {
               />
             ))}
           </View>
-          <View style={{marginBottom: 6}}>
-            <HourlyForecast />
+          <View>
+            <HourlyForecastMemoized />
           </View>
         </View>
 
-        <RainChance />
-        <DayForecast />
+        <RainChanceMemoized />
+        <DayForecastMemoized />
       </ImageBackground>
     </View>
   );
