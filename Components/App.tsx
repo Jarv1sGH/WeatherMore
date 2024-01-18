@@ -35,9 +35,11 @@ export default function App() {
             </React.Suspense>
           )}
           {selectedForecast === 'daily' && (
-            <React.Suspense fallback={<Text> Loading</Text>}>
-              <DailyForecastMemoized />
-            </React.Suspense>
+            <View style={styles.forecastWrapper}>
+              <React.Suspense fallback={<Text> Loading</Text>}>
+                <DailyForecastMemoized />
+              </React.Suspense>
+            </View>
           )}
         </View>
       </ScrollView>
@@ -52,5 +54,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: '#F6EDFF',
+  },
+  forecastWrapper: {
+    minHeight: 650,
   },
 });

@@ -1,9 +1,8 @@
-import {Text, View, TextInput, Pressable} from 'react-native';
+import {Text, View, TextInput, Pressable, Animated} from 'react-native';
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faBars, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {styles} from '../Styles/HeaderStyles';
-// import {useDispatch, useSelector} from 'react-redux';
 import {setSelectedForecast} from '../ReduxToolkit/Reducers/reducers';
 import {useAppSelector, useAppDispatch} from '../ReduxToolkit/hooks';
 

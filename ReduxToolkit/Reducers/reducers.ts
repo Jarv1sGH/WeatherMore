@@ -1,10 +1,4 @@
-// reducers/counter.js
 import { createSlice } from '@reduxjs/toolkit';
-
-// export interface SelectedComponentState {
-//   selectedForecast: string;
-// }
-
 const componentSlice = createSlice({
   name: 'setComponent',
   initialState: {

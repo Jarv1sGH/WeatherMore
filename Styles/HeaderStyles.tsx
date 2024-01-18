@@ -44,6 +44,7 @@ export const styles = StyleSheet.create({
     width: 100,
     backgroundColor: '#FFFF',
     borderRadius: 8,
+     
   },
   selectedOption: {
     backgroundColor: '#E0B6FF',
