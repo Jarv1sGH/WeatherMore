@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   searchInput: {
     width: '85%',
     marginLeft: 4,
-    color: '#FFFAF0',
+    
   },
   forecastButtonsWrapper: {
     width: '92%',
@@ -44,7 +44,6 @@ export const styles = StyleSheet.create({
     width: 100,
     backgroundColor: '#FFFF',
     borderRadius: 8,
-     
   },
   selectedOption: {
     backgroundColor: '#E0B6FF',

@@ -14,7 +14,8 @@ export const styles = StyleSheet.create({
     height: 85,
   },
   weatherContainer: {
-    height: 330,
+    height: 400,
+    // borderWidth: 1,
   },
   weatherDetails: {
     width: '95%',
@@ -57,6 +58,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    // borderWidth: 2,
   },
   weatherDetailCard: {
     opacity: 0.75,

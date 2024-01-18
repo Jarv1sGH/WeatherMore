@@ -1,9 +1,12 @@
 import {Text, View, TextInput, Pressable, Animated} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faBars, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {styles} from '../Styles/HeaderStyles';
-import {setSelectedForecast} from '../ReduxToolkit/Reducers/reducers';
+import {
+  setSearchClicked,
+  setSelectedForecast,
+} from '../ReduxToolkit/Reducers/reducers';
 import {useAppSelector, useAppDispatch} from '../ReduxToolkit/hooks';
 
 export default function Header() {
@@ -11,6 +14,10 @@ export default function Header() {
   const selectedForecast = useAppSelector(
     state => state.selectedComponentReducer.selectedForecast,
   );
+  const handlePress = () => {
+    dispatch(setSearchClicked(true));
+  };
+
   return (
     <View style={styles.Header}>
       <View style={styles.searchContainer}>
@@ -18,12 +25,14 @@ export default function Header() {
           <Pressable>
             <FontAwesomeIcon icon={faBars} size={20} />
           </Pressable>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Type here..."
-            //   onChangeText={handleInputChange}
-            value={'New delhi'}
-          />
+          <Pressable style={styles.searchInput} onPress={handlePress}>
+            <TextInput
+              placeholder="Search Location here..."
+              value={'New delhi'}
+              editable={false}
+              style={{color: '#FFFAF0'}}
+            />
+          </Pressable>
           <Pressable>
             <FontAwesomeIcon icon={faSearch} size={20} />
           </Pressable>

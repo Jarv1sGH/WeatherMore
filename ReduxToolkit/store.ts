@@ -1,7 +1,6 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
 import selectedComponentReducer from './Reducers/reducers';
-
 const store = configureStore({
   reducer: {
     selectedComponentReducer: selectedComponentReducer,
