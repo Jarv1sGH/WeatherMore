@@ -4,6 +4,8 @@ const componentSlice = createSlice({
   initialState: {
     selectedForecast: 'today',
     searchClicked: false,
+    locationData: {
+    },
   },
   reducers: {
     setSelectedForecast: (state, action) => {
@@ -12,8 +14,11 @@ const componentSlice = createSlice({
     setSearchClicked: (state, action) => {
       state.searchClicked = action.payload;
     },
+    setLocationData: (state, action) => {
+      state.locationData = action.payload;
+    },
   },
 });
 
-export const { setSelectedForecast, setSearchClicked } = componentSlice.actions;
+export const { setSelectedForecast, setSearchClicked, setLocationData } = componentSlice.actions;
 export default componentSlice.reducer;
