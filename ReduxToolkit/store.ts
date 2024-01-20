@@ -1,9 +1,12 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
 import selectedComponentReducer from './Reducers/reducers';
+import locationStringSlice from './Reducers/locationStringSlice';
+
 const store = configureStore({
   reducer: {
-    selectedComponentReducer: selectedComponentReducer,
+    setState: selectedComponentReducer,
+    locationReducer: locationStringSlice,
   },
 });
 

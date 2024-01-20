@@ -1,4 +1,5 @@
-import Geolocation from '@react-native-community/geolocation';
+// import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 export const checkLocationPermission = async (): Promise<boolean> => {
@@ -32,9 +33,10 @@ export const getLocationCoordinates = async (): Promise<{ lat: number; long: num
             resolve(coordinates);
         },
             (error) => {
+                console.log(error)
                 resolve(null);
             },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 900000, }
         )
     })
 
@@ -62,3 +64,34 @@ export const getIPLocation = async (): Promise<{ lat: number; long: number } | n
     }
 
 };
+
+
+//@ts-ignore (defining types for the arguments seems unnecessary)
+export  const handleLocationData = async (dispatch , setLocationCoords): Promise<void> => {
+    //Check for location permission
+    const permissionGranted = await checkLocationPermission();
+
+    const getLocationAndDipatch = async (): Promise<void> => {
+      const coordinates = await getLocationCoordinates();
+      if (coordinates === null) {
+        const ipCoords = await getIPLocation();
+        dispatch(setLocationCoords({...ipCoords}));
+      } else {
+        dispatch(setLocationCoords({...coordinates}));
+      }
+    };
+
+    if (permissionGranted) {
+      await getLocationAndDipatch();
+      return;
+    } else {
+      // if not granted then request for permission
+      const reqPermission = await requestLocationPermission();
+      if (reqPermission) {
+        await getLocationAndDipatch();
+      } else {
+        const coordinates = await getIPLocation();
+        dispatch(setLocationCoords({...coordinates}));
+      }
+    }
+  };

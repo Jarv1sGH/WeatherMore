@@ -77,7 +77,7 @@ const DailyForecastCard = () => {
 
 export default function DailyForecast() {
   return (
-    <View>
+    <View style={styles.dailyWeatherContainer}>
       <DailyForecastCard />
     </View>
   );

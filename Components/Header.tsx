@@ -12,7 +12,7 @@ import {useAppSelector, useAppDispatch} from '../ReduxToolkit/hooks';
 export default function Header() {
   const dispatch = useAppDispatch();
   const selectedForecast = useAppSelector(
-    state => state.selectedComponentReducer.selectedForecast,
+    state => state.setState.selectedForecast,
   );
   const handlePress = () => {
     dispatch(setSearchClicked(true));

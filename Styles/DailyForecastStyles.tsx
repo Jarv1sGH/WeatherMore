@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  dailyWeatherContainer: {
+    flex: 1,
+  },
   dailyCardWrapper: {
     padding: 5,
     marginTop: 10,
