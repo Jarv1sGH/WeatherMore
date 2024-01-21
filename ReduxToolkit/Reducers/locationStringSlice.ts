@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_KEY } from '@env';
 import axios, { AxiosResponse } from 'axios'
 
@@ -15,7 +14,14 @@ type GeoApiResType = {
     countryName: string,
     principalSubdivision: string,
 }
-
+type locationDataType = {
+    city: string,
+    countryCode: string,
+    locality: string,
+    countryName: string,
+    principalSubdivision: string,
+    id: number | null
+}
 export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLocationString', async (coordinates: coordinatesType): Promise<object> => {
 
     try {
@@ -47,7 +53,7 @@ export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLo
         }
 
     } catch (error) {
-        console.log(error)
+        console.error(error);
         throw (error)
     }
 })
@@ -56,7 +62,7 @@ const locationStringSlice = createSlice({
     name: 'locationStringSlice',
     initialState: {
         loading: false,
-        locationData: {},
+        locationData: {} as locationDataType,
         error: '' as string | undefined,
     },
     reducers: {},
@@ -67,7 +73,7 @@ const locationStringSlice = createSlice({
         })
         builder.addCase(fetchLocationString.fulfilled, (state, action) => {
             state.loading = false
-            state.locationData = action.payload
+            state.locationData = action.payload as locationDataType
         })
         builder.addCase(fetchLocationString.rejected, (state, action) => {
             state.loading = false

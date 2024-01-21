@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
+
+type locationCoordsType = {
+  lat: number,
+  long: number
+}
 const componentSlice = createSlice({
   name: 'setComponent',
   initialState: {
     selectedForecast: 'today',
     searchClicked: false,
-    locationCoords: {},
+    locationCoords: {} as locationCoordsType,
   },
   reducers: {
     setSelectedForecast: (state, action) => {

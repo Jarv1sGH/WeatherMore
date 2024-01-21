@@ -15,6 +15,9 @@ import Search from './Search';
 import {handleLocationData} from '../utils/locationUtils';
 import {setLocationCoords} from '../ReduxToolkit/Reducers/reducers';
 import {fetchLocationString} from '../ReduxToolkit/Reducers/locationStringSlice';
+import {fetchCurrentWeather} from '../ReduxToolkit/Reducers/currentWeatherSlice';
+import {fetchHourWeather} from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
+import {fetchDailyWeather} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
 
 const WeatherMemoized = React.memo(Weather);
 const DailyForecastMemoized = React.memo(DailyForecast);
@@ -26,21 +29,28 @@ export default function App() {
   );
   const searchClicked = useAppSelector(state => state.setState.searchClicked);
   const locationCoords = useAppSelector(state => state.setState.locationCoords);
-  const {locationData, loading} = useAppSelector(
-    state => state.locationReducer,
-  );
+  const {locationData} = useAppSelector(state => state.locationReducer);
+  const {currentWeather} = useAppSelector(state => state.currentWeather);
+  const {hourWeather} = useAppSelector(state => state.hourWeather);
+  const {dailyWeather} = useAppSelector(state => state.dailyWeather);
 
   useEffect(() => {
     handleLocationData(dispatch, setLocationCoords);
   }, []);
 
   useEffect(() => {
-    // @ts-ignore //todo: update the type properly later
     if (locationCoords.lat !== undefined && locationCoords.long !== undefined) {
-      // @ts-ignore //todo: update the type properly lataer
       dispatch(fetchLocationString(locationCoords));
     }
   }, [locationCoords]);
+  useEffect(() => {
+    if (locationData.id !== null && locationData.id !== undefined) {
+      dispatch(fetchCurrentWeather(locationData.id));
+      dispatch(fetchHourWeather(locationData.id));
+      // dispatch(fetchDailyWeather(locationData.id));
+    }
+  }, [locationData]);
+
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
