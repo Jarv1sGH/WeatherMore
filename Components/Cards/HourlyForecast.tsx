@@ -3,8 +3,11 @@ import React from 'react';
 import {styles} from '../../Styles/HourlyForecastStyles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faClock} from '@fortawesome/free-regular-svg-icons';
+import {useAppSelector} from '../../ReduxToolkit/hooks';
+import {timeStringConvertor} from '../../utils/dateTimeUtils';
 
 const HourlyForecast = () => {
+  const {hourWeather} = useAppSelector(state => state.hourWeather);
   return (
     <View style={styles.hourlyContainer}>
       <View style={styles.headingContainer}>
@@ -14,54 +17,21 @@ const HourlyForecast = () => {
         <Text style={styles.headingText}>Hourly</Text>
       </View>
       <View style={styles.hourlyTempsWrapper}>
-        <View style={styles.hourTempsContainer}>
-          <Text style={[styles.hourTempText]}>12 am</Text>
-          <Image
-            source={require('../../assets/icons/d320.png')}
-            style={styles.weatherIcons}
-          />
-          <Text style={[styles.hourTempText, {fontSize: 18}]}>8°</Text>
-        </View>
-        <View style={styles.hourTempsContainer}>
-          <Text style={[styles.hourTempText]}>1 am</Text>
-          <Image
-            source={require('../../assets/icons/d320.png')}
-            style={styles.weatherIcons}
-          />
-          <Text style={[styles.hourTempText, {fontSize: 20}]}>8°</Text>
-        </View>
-        <View style={styles.hourTempsContainer}>
-          <Text style={[styles.hourTempText]}>2 am</Text>
-          <Image
-            source={require('../../assets/icons/d320.png')}
-            style={styles.weatherIcons}
-          />
-          <Text style={[styles.hourTempText, {fontSize: 20}]}>8°</Text>
-        </View>
-        <View style={styles.hourTempsContainer}>
-          <Text style={[styles.hourTempText]}>3 am</Text>
-          <Image
-            source={require('../../assets/icons/d320.png')}
-            style={styles.weatherIcons}
-          />
-          <Text style={[styles.hourTempText, {fontSize: 20}]}>8°</Text>
-        </View>
-        <View style={styles.hourTempsContainer}>
-          <Text style={[styles.hourTempText]}>4 am</Text>
-          <Image
-            source={require('../../assets/icons/d320.png')}
-            style={styles.weatherIcons}
-          />
-          <Text style={[styles.hourTempText, {fontSize: 20}]}>8°</Text>
-        </View>
-        <View style={styles.hourTempsContainer}>
-          <Text style={[styles.hourTempText]}>5 am</Text>
-          <Image
-            source={require('../../assets/icons/d320.png')}
-            style={styles.weatherIcons}
-          />
-          <Text style={[styles.hourTempText, {fontSize: 20}]}>8°</Text>
-        </View>
+        {hourWeather.forecast &&
+          hourWeather.forecast.slice(0, 6).map(item => (
+            <View key={item.time} style={styles.hourTempsContainer}>
+              <Text style={[styles.hourTempText]}>
+                {timeStringConvertor(item.time)}
+              </Text>
+              <Image
+                source={require('../../assets/icons/d320.png')}
+                style={styles.weatherIcons}
+              />
+              <Text style={[styles.hourTempText, {fontSize: 16}]}>
+                {item.temperature}°
+              </Text>
+            </View>
+          ))}
       </View>
     </View>
   );

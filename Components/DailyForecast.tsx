@@ -1,8 +1,14 @@
 import {Text, View, Pressable, Animated, Image} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import {styles} from '../Styles/DailyForecastStyles';
+import {
+  fetchDailyWeather,
+  DailyObjType,
+} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
+import {useAppDispatch, useAppSelector} from '../ReduxToolkit/hooks';
+import {formatDateString, uvIndexString} from '../utils/dateTimeUtils';
 
-const DailyForecastCard = () => {
+const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const cardHeight = useRef(new Animated.Value(70)).current;
 
@@ -14,7 +20,9 @@ const DailyForecastCard = () => {
       useNativeDriver: false,
     }).start();
   };
-
+  const formattedDate = formatDateString(dailyDataObj.date);
+  const uvIndexStr: string = uvIndexString(dailyDataObj.uvIndex);
+  // Todo -  some times values can be null add a check for that
   return (
     <Pressable
       onPress={() => {
@@ -31,9 +39,9 @@ const DailyForecastCard = () => {
           <View style={{flexDirection: 'row', height: 65}}>
             <View style={styles.cardLeft}>
               <Text style={[styles.cardText, {color: '#262626'}]}>
-                Fri , 19 jan
+                {formattedDate}
               </Text>
-              <Text style={styles.cardText}>Partly Cloudy</Text>
+              <Text style={styles.cardText}>{dailyDataObj.symbolPhrase}</Text>
             </View>
             <View style={styles.cardRight}>
               <View style={styles.weatherIconWrapper}>
@@ -43,12 +51,11 @@ const DailyForecastCard = () => {
                 />
               </View>
               <View style={styles.weatherTemp}>
-                <Text style={styles.tempText}>17°</Text>
-                <Text style={styles.tempText}>8°</Text>
+                <Text style={styles.tempText}>{dailyDataObj.maxTemp}°</Text>
+                <Text style={styles.tempText}>{dailyDataObj.minTemp}°</Text>
               </View>
             </View>
           </View>
-
           <View style={styles.expandedView}>
             <View style={{flex: 1}}>
               <Text style={styles.cardText}>Wind</Text>
@@ -58,14 +65,16 @@ const DailyForecastCard = () => {
             </View>
             <View style={{flex: 1}}>
               <Text style={[styles.cardText, styles.cardTextColor]}>
-                17 Kmph
-              </Text>
-              <Text style={[styles.cardText, styles.cardTextColor]}>88%</Text>
-              <Text style={[styles.cardText, styles.cardTextColor]}>
-                Moderate, 6
+                {dailyDataObj.maxWindSpeed} Kmph
               </Text>
               <Text style={[styles.cardText, styles.cardTextColor]}>
-                7:00 am, 5:58 pm
+                {dailyDataObj.maxRelHumidity} %
+              </Text>
+              <Text style={[styles.cardText, styles.cardTextColor]}>
+                {uvIndexStr}, {dailyDataObj.uvIndex}
+              </Text>
+              <Text style={[styles.cardText, styles.cardTextColor]}>
+                {dailyDataObj.sunrise} ,{dailyDataObj.sunset}
               </Text>
             </View>
           </View>
@@ -76,9 +85,16 @@ const DailyForecastCard = () => {
 };
 
 export default function DailyForecast() {
+  const {dailyWeather} = useAppSelector(state => state.dailyWeather);
+
   return (
     <View style={styles.dailyWeatherContainer}>
-      <DailyForecastCard />
+      {dailyWeather &&
+        dailyWeather.forecast
+          .slice(0, 10)
+          .map(item => (
+            <DailyForecastCard key={item.date} dailyDataObj={item} />
+          ))}
     </View>
   );
 }

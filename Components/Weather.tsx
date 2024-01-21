@@ -1,5 +1,5 @@
 import {Text, View, Image, ImageBackground} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {styles} from '../Styles/WeatherStyles';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {
@@ -14,6 +14,8 @@ import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
 import DayForecast from './Cards/WeekForecast';
 import RainChance from './Cards/RainChanceCard';
+import {weatherObjType} from '../ReduxToolkit/Reducers/currentWeatherSlice';
+import {capitalizeFirstLetter, formatDateString} from '../utils/dateTimeUtils';
 
 const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
 const HourlyForecastMemoized = React.memo(HourlyForecast);
@@ -26,62 +28,73 @@ type weatherDataType = {
   icon: IconProp;
 };
 
-export default function Weather() {
+export default function Weather({
+  weatherData,
+  showHourCard,
+}: {
+  weatherData: weatherObjType;
+  showHourCard: boolean;
+}) {
+  // useEffect(() => {
+  //   console.log(weatherData.sunrise, weatherData.sunset);
+  // }, [weatherData]);
+
   // Array to map weather detail cards
   const weatherDetailCardData: Array<weatherDataType> = [
     {
       name: 'Wind Speed',
-      value: '12 kmph',
+      value: `${weatherData?.windSpeed} km/h`,
       icon: faWind,
     },
     {
       name: 'Rain Chance',
-      value: '12%',
+      value: `${weatherData?.precipProb} % `,
       icon: faCloudRain,
     },
     {
       name: 'Humidity',
-      value: '90%',
+      value: `${weatherData?.relHumidity}% `,
       icon: faWater,
     },
     {
       name: 'Dew Point',
-      value: '9',
+      value: `${weatherData?.dewPoint}°C `,
       icon: faDroplet,
     },
     {
       name: 'UV Index',
-      value: '4 moderate',
+      value: `${weatherData?.uvIndex}, low`,
       icon: faSunPlantWilt,
     },
     {
       name: 'Pressure',
-      value: '1 bar',
+      value: `${weatherData?.pressure} hPa `,
       icon: faGauge,
     },
   ];
 
+  const formattedDate = formatDateString(weatherData?.time, true);
   return (
     <View style={styles.weatherOuter}>
       <ImageBackground
-        source={require('./../assets/bcg/bcg.jpg')} // Replace with the path to your image
+        source={require('./../assets/bcg/bcg.jpg')}
         style={styles.backgroundImage}>
         <View>
           <View style={styles.weatherContainer}>
             <View style={styles.weatherDetails}>
               <Text style={[styles.lastUpdateTime, styles.textColor]}>
-                January 13, 02:17
+                {formattedDate}
               </Text>
               <View style={styles.tempWrapper}>
                 <View>
                   <View style={styles.tempInnerWrapper}>
                     <Text style={[styles.temperature, styles.textColor]}>
-                      13
+                      {weatherData?.temperature}
                     </Text>
                     <Text style={[styles.unit, styles.textColor]}>°C</Text>
                   </View>
                   <Text style={[styles.textColor, styles.textWidth]}>
-                    Feels like 11°
+                    Feels like {weatherData?.feelsLikeTemp}°
                   </Text>
                 </View>
 
@@ -90,7 +103,9 @@ export default function Weather() {
                     style={styles.weatherIcon}
                     source={require('./../assets/icons/d320.png')}
                   />
-                  <Text>Rain</Text>
+                  <Text>
+                    {capitalizeFirstLetter(weatherData?.symbolPhrase)}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -105,13 +120,14 @@ export default function Weather() {
               />
             ))}
           </View>
-          <View>
-            <HourlyForecastMemoized />
-          </View>
         </View>
-
-        <RainChanceMemoized />
-        <DayForecastMemoized />
+        {showHourCard && (
+          <>
+            <HourlyForecastMemoized />
+            <RainChanceMemoized />
+            <DayForecastMemoized />
+          </>
+        )}
       </ImageBackground>
     </View>
   );

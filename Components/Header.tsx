@@ -14,6 +14,7 @@ export default function Header() {
   const selectedForecast = useAppSelector(
     state => state.setState.selectedForecast,
   );
+  const {locationData} = useAppSelector(state => state.locationReducer);
   const handlePress = () => {
     dispatch(setSearchClicked(true));
   };
@@ -22,13 +23,13 @@ export default function Header() {
     <View style={styles.Header}>
       <View style={styles.searchContainer}>
         <View style={styles.searchInputWrapper}>
-          <Pressable>
+          {/* <Pressable>
             <FontAwesomeIcon icon={faBars} size={20} />
-          </Pressable>
+          </Pressable> */}
           <Pressable style={styles.searchInput} onPress={handlePress}>
             <TextInput
               placeholder="Search Location here..."
-              value={'New delhi'}
+              value={`${locationData.locality} , ${locationData.city}`}
               editable={false}
               style={{color: '#FFFAF0'}}
             />

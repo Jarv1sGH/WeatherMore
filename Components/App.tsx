@@ -6,7 +6,7 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from './Header';
 const Weather = React.lazy(() => import('./Weather'));
 const DailyForecast = React.lazy(() => import('./DailyForecast'));
@@ -18,12 +18,14 @@ import {fetchLocationString} from '../ReduxToolkit/Reducers/locationStringSlice'
 import {fetchCurrentWeather} from '../ReduxToolkit/Reducers/currentWeatherSlice';
 import {fetchHourWeather} from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
 import {fetchDailyWeather} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
-
+import {weatherObjType} from '../ReduxToolkit/Reducers/currentWeatherSlice';
+import {createWeatherObj} from '../utils/ApiUtils';
 const WeatherMemoized = React.memo(Weather);
 const DailyForecastMemoized = React.memo(DailyForecast);
 
 export default function App() {
   const dispatch = useAppDispatch();
+
   const selectedForecast = useAppSelector(
     state => state.setState.selectedForecast,
   );
@@ -47,10 +49,22 @@ export default function App() {
     if (locationData.id !== null && locationData.id !== undefined) {
       dispatch(fetchCurrentWeather(locationData.id));
       dispatch(fetchHourWeather(locationData.id));
-      // dispatch(fetchDailyWeather(locationData.id));
+      dispatch(fetchDailyWeather(locationData.id));
     }
   }, [locationData]);
 
+  const [tomorrowWeatherData, setTomorrowWeatherData] =
+    useState<weatherObjType | null>(null);
+
+  useEffect(() => {
+    console.log(dailyWeather?.forecast[1]);
+    console.log(hourWeather);
+  }, [dailyWeather]);
+
+  useEffect(() => {
+    if (dailyWeather.forecast[1] !== undefined)
+      setTomorrowWeatherData(createWeatherObj(dailyWeather.forecast[1]));
+  }, [dailyWeather]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -64,12 +78,18 @@ export default function App() {
             <ScrollView>
               {selectedForecast === 'today' && (
                 <React.Suspense fallback={<Text> Loading</Text>}>
-                  <WeatherMemoized />
+                  <WeatherMemoized
+                    weatherData={currentWeather?.current}
+                    showHourCard={true}
+                  />
                 </React.Suspense>
               )}
               {selectedForecast === 'tomorrow' && (
                 <React.Suspense fallback={<Text> Loading</Text>}>
-                  <WeatherMemoized />
+                  <WeatherMemoized
+                    weatherData={tomorrowWeatherData as weatherObjType}
+                    showHourCard={false}
+                  />
                 </React.Suspense>
               )}
               {selectedForecast === 'daily' && (

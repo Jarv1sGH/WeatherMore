@@ -4,11 +4,28 @@ import axios from 'axios'
 import { options } from "../../utils/ApiUtils";
 
 
-interface currentWeatherType {
-    current: {
-        [key: string]: string | number;
 
-    }
+
+export interface weatherObjType {
+    time: string,
+    temperature: number,
+    symbol: string,
+    symbolPhrase: string,
+    sunrise?: string,
+    sunset?: string,
+    uvIndex: number,
+    dewPoint: number,
+    feelsLikeTemp: number,
+    precipProb: number,
+    pressure: number,
+    thunderProb?: number,
+    windSpeed: number,
+    windDirString?: string,
+    relHumidity: number,
+}
+
+interface currentWeatherType {
+    current: weatherObjType
 }
 export const fetchCurrentWeather = createAsyncThunk('currentWeatherSlice/fetchCurrentWeather', async (id: number) => {
 

@@ -50,5 +50,6 @@ export const styles = StyleSheet.create({
   },
   optionText: {
     fontWeight: '600',
+    color: '#494F55',
   },
 });

@@ -52,6 +52,7 @@ export const styles = StyleSheet.create({
     marginLeft: 3,
     padding: 1,
     fontWeight: '500',
+    color: '#494F55',
   },
   cardTextColor: {
     color: '#262626',

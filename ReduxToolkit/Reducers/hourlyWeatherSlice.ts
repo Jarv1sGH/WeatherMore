@@ -15,7 +15,7 @@ export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWe
 
 type hourType = {
     time: string,
-    temperature: string,
+    temperature: number,
     symbol: string,
     symbolPhrase: string,
     windDirString: string,

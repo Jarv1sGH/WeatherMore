@@ -13,7 +13,7 @@ export const fetchDailyWeather = createAsyncThunk('dailyWeatherSlice/fetchDailyW
     }
 })
 
-type dailyObjType = {
+export type DailyObjType = {
     date: string,
     minTemp: number,
     maxTemp: number,
@@ -23,7 +23,11 @@ type dailyObjType = {
     sunrise: string,
     sunset: string,
     uvIndex: number,
-    maxRelHumidity: number
+    maxRelHumidity: number,
+    maxFeelsLikeTemp: number,
+    maxDewPoint: number,
+    precipProb: number,
+    pressure: number,
 }
 
 const daillyWeatherSlice = createSlice({
@@ -31,7 +35,7 @@ const daillyWeatherSlice = createSlice({
     initialState: {
         loading: false,
         dailyWeather: {
-            forecast: [] as Array<dailyObjType>,
+            forecast: [] as Array<DailyObjType>,
         },
         error: '' as string | undefined
     },

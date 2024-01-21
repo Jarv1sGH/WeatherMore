@@ -1,15 +1,37 @@
 import {View, Text, Image, Dimensions} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from '../../Styles/HourlyForecastStyles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCalendarDays} from '@fortawesome/free-regular-svg-icons';
 import {LineChart} from 'react-native-chart-kit';
-const WeekForecast = () => {
-  const temperatureData = [-8, 5, 9, 3, -4, 7, 4];
+import {useAppSelector} from '../../ReduxToolkit/hooks';
+import {dayExtractor} from '../../utils/dateTimeUtils';
 
+const WeekForecast = () => {
+  const {dailyWeather} = useAppSelector(state => state.dailyWeather);
+  // const temperatureData = [-8, 5, 9, 3, -4, 7, 4];
   // Data for the chart
+  const [dayArr, setDayArr] = useState<Array<string>>([]);
+  const [temperatureData, setTemperatureData] = useState<Array<number>>([]);
+
+  useEffect(() => {
+    if (dailyWeather.forecast !== undefined) {
+      setDayArr(
+        dailyWeather.forecast.slice(0, 7).map(item => {
+          return dayExtractor(item.date);
+        }),
+      );
+      setTemperatureData(
+        dailyWeather.forecast.slice(0, 7).map(item => {
+          return item.maxTemp;
+        }),
+      );
+      console.log(dailyWeather.forecast[0]);
+    }
+  }, [dailyWeather]);
+
   const data = {
-    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    labels: [...dayArr],
     datasets: [
       {
         data: temperatureData,
@@ -33,7 +55,6 @@ const WeekForecast = () => {
       borderRadius: 16,
     },
     decimalPlaces: 0,
-
   };
 
   return (
@@ -45,24 +66,26 @@ const WeekForecast = () => {
         <Text style={styles.headingText}>Week</Text>
       </View>
       <View style={styles.lineChartWrapper}>
-        <LineChart
-          data={data}
-          withVerticalLines={false}
-          width={345}
-          height={165}
-          yLabelsOffset={10}
-          chartConfig={chartConfig}
-          bezier
-          withDots={true}
-          withShadow={true}
-          segments={2}
-          style={{
-            marginVertical: 8,
-            borderRadius: 16,
-            paddingRight: 30,
-            marginLeft: 35,
-          }}
-        />
+        {temperatureData.length > 0 && (
+          <LineChart
+            data={data}
+            withVerticalLines={false}
+            width={345}
+            height={165}
+            yLabelsOffset={10}
+            chartConfig={chartConfig}
+            bezier
+            withDots={true}
+            withShadow={true}
+            segments={2}
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+              paddingRight: 30,
+              marginLeft: 35,
+            }}
+          />
+        )}
       </View>
     </View>
   );
