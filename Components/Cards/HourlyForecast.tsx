@@ -1,5 +1,5 @@
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from '../../Styles/HourlyForecastStyles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faClock} from '@fortawesome/free-regular-svg-icons';
@@ -8,6 +8,17 @@ import {timeStringConvertor} from '../../utils/dateTimeUtils';
 
 const HourlyForecast = () => {
   const {hourWeather} = useAppSelector(state => state.hourWeather);
+  const {locationData} = useAppSelector(state => state.locationReducer);
+  const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
+  useEffect(() => {
+    if (locationData.timezone !== undefined) {
+      setOptions({
+        hour: '2-digit',
+        timeZone: locationData?.timezone,
+      });
+    }
+  }, [locationData]);
+
   return (
     <View style={styles.hourlyContainer}>
       <View style={styles.headingContainer}>
@@ -21,7 +32,7 @@ const HourlyForecast = () => {
           hourWeather.forecast.slice(0, 6).map(item => (
             <View key={item.time} style={styles.hourTempsContainer}>
               <Text style={[styles.hourTempText]}>
-                {timeStringConvertor(item.time)}
+                {timeStringConvertor(item.time, options)}
               </Text>
               <Image
                 source={require('../../assets/icons/d320.png')}

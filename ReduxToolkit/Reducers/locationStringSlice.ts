@@ -14,13 +14,14 @@ type GeoApiResType = {
     countryName: string,
     principalSubdivision: string,
 }
-type locationDataType = {
+export type locationDataType = {
     city: string,
     countryCode: string,
     locality: string,
     countryName: string,
     principalSubdivision: string,
-    id: number | null
+    id: number | null,
+    timezone: string
 }
 export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLocationString', async (coordinates: coordinatesType): Promise<object> => {
 
@@ -46,6 +47,7 @@ export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLo
         const response = await axios.request(options)
         return {
             id: response.data?.locations[0]?.id,
+            timezone: response.data?.locations[0]?.timezone,
             locality: locality,
             city: city,
             country: countryName,

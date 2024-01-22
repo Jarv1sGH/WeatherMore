@@ -9,8 +9,6 @@ import {dayExtractor} from '../../utils/dateTimeUtils';
 
 const WeekForecast = () => {
   const {dailyWeather} = useAppSelector(state => state.dailyWeather);
-  // const temperatureData = [-8, 5, 9, 3, -4, 7, 4];
-  // Data for the chart
   const [dayArr, setDayArr] = useState<Array<string>>([]);
   const [temperatureData, setTemperatureData] = useState<Array<number>>([]);
 
@@ -26,7 +24,6 @@ const WeekForecast = () => {
           return item.maxTemp;
         }),
       );
-      console.log(dailyWeather.forecast[0]);
     }
   }, [dailyWeather]);
 

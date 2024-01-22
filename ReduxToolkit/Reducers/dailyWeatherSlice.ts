@@ -1,8 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"; import axios from "axios";
-import { options } from "../../utils/ApiUtils";
+
+import { API_KEY } from "@env";
 
 export const fetchDailyWeather = createAsyncThunk('dailyWeatherSlice/fetchDailyWeather', async (id: number) => {
-
+    const options = {
+        params: {
+            alt: '0',
+            tempunit: 'C',
+            windunit: 'KMH',
+            periods: 12,
+            dataset: 'full'
+        },
+        headers: {
+            'X-RapidAPI-Key': API_KEY,
+            'X-RapidAPI-Host': 'foreca-weather.p.rapidapi.com'
+        }
+    };
     try {
         const url = `https://foreca-weather.p.rapidapi.com/forecast/daily/${id}`
         const { data } = await axios.get(url, options);

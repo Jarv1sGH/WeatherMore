@@ -1,5 +1,5 @@
 import {Text, View, Image, ImageBackground} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from '../Styles/WeatherStyles';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {
@@ -12,15 +12,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
-import DayForecast from './Cards/WeekForecast';
+import WeekForecast from './Cards/WeekForecast';
 import RainChance from './Cards/RainChanceCard';
 import {weatherObjType} from '../ReduxToolkit/Reducers/currentWeatherSlice';
-import {capitalizeFirstLetter, formatDateString} from '../utils/dateTimeUtils';
+import {
+  capitalizeFirstLetter,
+  timeStringConvertor,
+} from '../utils/dateTimeUtils';
+import {useAppSelector} from '../ReduxToolkit/hooks';
 
 const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
 const HourlyForecastMemoized = React.memo(HourlyForecast);
 const RainChanceMemoized = React.memo(RainChance);
-const DayForecastMemoized = React.memo(DayForecast);
+const WeekForecastMemoized = React.memo(WeekForecast);
 
 type weatherDataType = {
   name: string;
@@ -35,10 +39,20 @@ export default function Weather({
   weatherData: weatherObjType;
   showHourCard: boolean;
 }) {
-  // useEffect(() => {
-  //   console.log(weatherData.sunrise, weatherData.sunset);
-  // }, [weatherData]);
-
+  const {locationData} = useAppSelector(state => state.locationReducer);
+  const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
+  useEffect(() => {
+    if (locationData.timezone !== undefined) {
+      setOptions({
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: locationData?.timezone,
+      });
+    }
+  }, [locationData]);
   // Array to map weather detail cards
   const weatherDetailCardData: Array<weatherDataType> = [
     {
@@ -68,12 +82,11 @@ export default function Weather({
     },
     {
       name: 'Pressure',
-      value: `${weatherData?.pressure} hPa `,
+      value: `${Math.floor(weatherData?.pressure)} mBar `,
       icon: faGauge,
     },
   ];
 
-  const formattedDate = formatDateString(weatherData?.time, true);
   return (
     <View style={styles.weatherOuter}>
       <ImageBackground
@@ -83,7 +96,7 @@ export default function Weather({
           <View style={styles.weatherContainer}>
             <View style={styles.weatherDetails}>
               <Text style={[styles.lastUpdateTime, styles.textColor]}>
-                {formattedDate}
+                {timeStringConvertor(weatherData?.time, options)}
               </Text>
               <View style={styles.tempWrapper}>
                 <View>
@@ -125,9 +138,9 @@ export default function Weather({
           <>
             <HourlyForecastMemoized />
             <RainChanceMemoized />
-            <DayForecastMemoized />
           </>
         )}
+        <WeekForecastMemoized />
       </ImageBackground>
     </View>
   );

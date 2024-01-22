@@ -33,7 +33,6 @@ export default function App() {
   const locationCoords = useAppSelector(state => state.setState.locationCoords);
   const {locationData} = useAppSelector(state => state.locationReducer);
   const {currentWeather} = useAppSelector(state => state.currentWeather);
-  const {hourWeather} = useAppSelector(state => state.hourWeather);
   const {dailyWeather} = useAppSelector(state => state.dailyWeather);
 
   useEffect(() => {
@@ -45,21 +44,25 @@ export default function App() {
       dispatch(fetchLocationString(locationCoords));
     }
   }, [locationCoords]);
+
   useEffect(() => {
     if (locationData.id !== null && locationData.id !== undefined) {
-      dispatch(fetchCurrentWeather(locationData.id));
-      dispatch(fetchHourWeather(locationData.id));
-      dispatch(fetchDailyWeather(locationData.id));
+      const funcData = {
+        id: locationData.id,
+        timezone: locationData.timezone,
+      };
+      dispatch(fetchCurrentWeather(funcData));
+      dispatch(fetchHourWeather(funcData));
+
+      // To avoid being rate limited
+      setTimeout(() => {
+        dispatch(fetchDailyWeather(funcData.id));
+      }, 500);
     }
   }, [locationData]);
 
   const [tomorrowWeatherData, setTomorrowWeatherData] =
     useState<weatherObjType | null>(null);
-
-  useEffect(() => {
-    console.log(dailyWeather?.forecast[1]);
-    console.log(hourWeather);
-  }, [dailyWeather]);
 
   useEffect(() => {
     if (dailyWeather.forecast[1] !== undefined)

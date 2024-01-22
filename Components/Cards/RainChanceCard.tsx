@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from '../../Styles/HourlyForecastStyles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCloudRain} from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,17 @@ import {useAppSelector} from '../../ReduxToolkit/hooks';
 import {timeStringConvertor} from '../../utils/dateTimeUtils';
 
 const RainChance = () => {
+  const {locationData} = useAppSelector(state => state.locationReducer);
+  const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
+  useEffect(() => {
+    if (locationData.timezone !== undefined) {
+      setOptions({
+        hour: '2-digit',
+        hour12: true,
+        timeZone: locationData?.timezone,
+      });
+    }
+  }, [locationData]);
   const {hourWeather} = useAppSelector(state => state.hourWeather);
   return (
     <View style={[styles.hourlyContainer, styles.RainChanceContainer]}>
@@ -24,7 +35,7 @@ const RainChance = () => {
             .map(item => (
               <RangeIndicator
                 key={item.time}
-                time={timeStringConvertor(item.time)}
+                time={timeStringConvertor(item.time, options)}
                 minValue={0}
                 maxValue={item.precipProb}
               />

@@ -74,7 +74,8 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
                 {uvIndexStr}, {dailyDataObj.uvIndex}
               </Text>
               <Text style={[styles.cardText, styles.cardTextColor]}>
-                {dailyDataObj.sunrise} ,{dailyDataObj.sunset}
+                {dailyDataObj.sunrise.slice(0, -3)},
+                {dailyDataObj.sunset.slice(0, -3)}
               </Text>
             </View>
           </View>

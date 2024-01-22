@@ -1,9 +1,12 @@
+import { API_KEY } from "@env";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import axios from 'axios'
-import { options } from "../../utils/ApiUtils";
 
-
+type FuncDataType = {
+    id: number,
+    timezone: string
+}
 
 
 export interface weatherObjType {
@@ -27,9 +30,21 @@ export interface weatherObjType {
 interface currentWeatherType {
     current: weatherObjType
 }
-export const fetchCurrentWeather = createAsyncThunk('currentWeatherSlice/fetchCurrentWeather', async (id: number) => {
-
-    const url = `https://foreca-weather.p.rapidapi.com/current/${id}`
+export const fetchCurrentWeather = createAsyncThunk('currentWeatherSlice/fetchCurrentWeather', async (funcData: FuncDataType) => {
+    const options = {
+        params: {
+            alt: '0',
+            tempunit: 'C',
+            windunit: 'MS',
+            tz: funcData.timezone,
+            lang: 'en'
+        },
+        headers: {
+            'X-RapidAPI-Key': API_KEY,
+            'X-RapidAPI-Host': 'foreca-weather.p.rapidapi.com'
+        }
+    };
+    const url = `https://foreca-weather.p.rapidapi.com/current/${funcData.id}`
     try {
         const { data } = await axios.get(url, options);
         return data;

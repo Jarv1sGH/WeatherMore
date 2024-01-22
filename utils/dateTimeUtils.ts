@@ -1,8 +1,9 @@
-export const formatDateString = (inputDateString: string, fromWeatherComponent = false): string => {
+import { locationDataType } from "../ReduxToolkit/Reducers/locationStringSlice";
+
+export const formatDateString = (inputDateString: string,): string => {
     const inputDate = new Date(inputDateString);
     const currentDate = new Date();
     if (
-        fromWeatherComponent === false &&
         inputDate.getDate() === currentDate.getDate() &&
         inputDate.getMonth() === currentDate.getMonth() &&
         inputDate.getFullYear() === currentDate.getFullYear()
@@ -44,13 +45,17 @@ export const uvIndexString = (uvIndex: number) => {
 export const capitalizeFirstLetter = (string: string) => {
     return string?.charAt(0).toUpperCase() + string?.slice(1);
 }
-export const timeStringConvertor = (dateStr: string) => {
-    const timeStr = new Date(dateStr);
-    const time = timeStr?.toLocaleTimeString([], {
-        hour: '2-digit',
-    });
-    return time;
+
+export const timeStringConvertor = (dateStr: string, options: Intl.DateTimeFormatOptions): string => {
+    if (dateStr !== undefined) {
+
+        const timeStr = new Date(dateStr);
+        const formatter = new Intl.DateTimeFormat('en-US', options);
+        return formatter.format(timeStr);
+    }
+    return '';
 };
+
 export const dayExtractor = (dateStr: string) => {
     const date = new Date(dateStr)
     const options: Intl.DateTimeFormatOptions = {

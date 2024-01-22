@@ -1,10 +1,30 @@
+import { API_KEY } from "@env";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"; import axios from "axios";
-import { options } from "../../utils/ApiUtils";
+// import { options } from "../../utils/ApiUtils";
+type FuncDataType = {
+    id: number,
+    timezone: string
+}
 
-export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWeather', async (id: number) => {
-
+export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWeather', async (funcData: FuncDataType) => {
+    const options = {
+        params: {
+            alt: '0',
+            tempunit: 'C',
+            windunit: 'KMH',
+            lang: 'en',
+            tz: funcData.timezone,
+            periods: 48,
+            dataset: 'full',
+            history: false
+        },
+        headers: {
+            'X-RapidAPI-Key': API_KEY,
+            'X-RapidAPI-Host': 'foreca-weather.p.rapidapi.com'
+        }
+    };
     try {
-        const url = `https://foreca-weather.p.rapidapi.com/forecast/hourly/${id}`
+        const url = `https://foreca-weather.p.rapidapi.com/forecast/hourly/${funcData.id}`
         const { data } = await axios.get(url, options);
         return data;
     } catch (error) {
