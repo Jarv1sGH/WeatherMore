@@ -1,4 +1,4 @@
-import {View, Text, Image, Dimensions} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from '../../Styles/HourlyForecastStyles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -9,26 +9,37 @@ import {dayExtractor} from '../../utils/dateTimeUtils';
 
 const WeekForecast = () => {
   const {dailyWeather} = useAppSelector(state => state.dailyWeather);
+  const selectedForecast = useAppSelector(
+    state => state.setState.selectedForecast,
+  );
   const [dayArr, setDayArr] = useState<Array<string>>([]);
   const [temperatureData, setTemperatureData] = useState<Array<number>>([]);
+  const [startIndex, setStartIndex] = useState<number>(0);
+  const [stopIndex, setStopIndex] = useState<number>(7);
+  useEffect(() => {
+    if (selectedForecast === 'tomorrow') {
+      setStartIndex(1);
+      setStopIndex(8);
+    }
+  }, [selectedForecast]);
 
   useEffect(() => {
     if (dailyWeather.forecast !== undefined) {
       setDayArr(
-        dailyWeather.forecast.slice(0, 7).map(item => {
+        dailyWeather.forecast.slice(startIndex, stopIndex).map(item => {
           return dayExtractor(item.date);
         }),
       );
       setTemperatureData(
-        dailyWeather.forecast.slice(0, 7).map(item => {
+        dailyWeather.forecast.slice(startIndex, stopIndex).map(item => {
           return item.maxTemp;
         }),
       );
     }
-  }, [dailyWeather]);
+  }, [dailyWeather, startIndex, stopIndex, selectedForecast]);
 
-  const data = {
-    labels: [...dayArr],
+  let data = {
+    labels: dayArr,
     datasets: [
       {
         data: temperatureData,
@@ -63,7 +74,7 @@ const WeekForecast = () => {
         <Text style={styles.headingText}>Week</Text>
       </View>
       <View style={styles.lineChartWrapper}>
-        {temperatureData.length > 0 && (
+        {temperatureData.length > 0 && data !== undefined && (
           <LineChart
             data={data}
             withVerticalLines={false}

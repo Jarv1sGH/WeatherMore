@@ -81,17 +81,13 @@ export default function App() {
             <ScrollView>
               {selectedForecast === 'today' && (
                 <React.Suspense fallback={<Text> Loading</Text>}>
-                  <WeatherMemoized
-                    weatherData={currentWeather?.current}
-                    showHourCard={true}
-                  />
+                  <WeatherMemoized weatherData={currentWeather?.current} />
                 </React.Suspense>
               )}
               {selectedForecast === 'tomorrow' && (
                 <React.Suspense fallback={<Text> Loading</Text>}>
                   <WeatherMemoized
                     weatherData={tomorrowWeatherData as weatherObjType}
-                    showHourCard={false}
                   />
                 </React.Suspense>
               )}

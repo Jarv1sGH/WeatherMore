@@ -6,10 +6,16 @@ import {faCloudRain} from '@fortawesome/free-solid-svg-icons';
 import RangeIndicator from './Range';
 import {useAppSelector} from '../../ReduxToolkit/hooks';
 import {timeStringConvertor} from '../../utils/dateTimeUtils';
+import {hourType} from '../../ReduxToolkit/Reducers/hourlyWeatherSlice';
 
-const RainChance = () => {
+const RainChance = ({hourCardData}: {hourCardData: Array<hourType>}) => {
   const {locationData} = useAppSelector(state => state.locationReducer);
+  const selectedForecast = useAppSelector(
+    state => state.setState.selectedForecast,
+  );
   const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
+  const [startIndex, setStartIndex] = useState<number>(0);
+  const [stopIndex, setStopIndex] = useState<number>(4);
   useEffect(() => {
     if (locationData.timezone !== undefined) {
       setOptions({
@@ -19,7 +25,13 @@ const RainChance = () => {
       });
     }
   }, [locationData]);
-  const {hourWeather} = useAppSelector(state => state.hourWeather);
+  useEffect(() => {
+    if (selectedForecast === 'tomorrow') {
+      setStartIndex(7);
+      setStopIndex(11);
+    }
+  }, [selectedForecast]);
+
   return (
     <View style={[styles.hourlyContainer, styles.RainChanceContainer]}>
       <View style={styles.headingContainer}>
@@ -29,9 +41,9 @@ const RainChance = () => {
         <Text style={styles.headingText}>Chance of Rain</Text>
       </View>
       <View>
-        {hourWeather.forecast &&
-          hourWeather.forecast
-            .slice(0, 4)
+        {hourCardData &&
+          hourCardData
+            .slice(startIndex, stopIndex)
             .map(item => (
               <RangeIndicator
                 key={item.time}

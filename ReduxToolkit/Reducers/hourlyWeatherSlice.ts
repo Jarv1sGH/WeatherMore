@@ -33,7 +33,7 @@ export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWe
     }
 })
 
-type hourType = {
+export type hourType = {
     time: string,
     temperature: number,
     symbol: string,

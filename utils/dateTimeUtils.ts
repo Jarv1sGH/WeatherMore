@@ -1,5 +1,6 @@
-import { locationDataType } from "../ReduxToolkit/Reducers/locationStringSlice";
+import { hourType } from "../ReduxToolkit/Reducers/hourlyWeatherSlice";
 
+const { DateTime } = require('luxon');
 export const formatDateString = (inputDateString: string,): string => {
     const inputDate = new Date(inputDateString);
     const currentDate = new Date();
@@ -63,4 +64,19 @@ export const dayExtractor = (dateStr: string) => {
     };
 
     return date?.toLocaleDateString('en-US', options);
+};
+
+export const tomorrowHoursExtractor = (dataArray: Array<hourType>, timezone: string) => {
+    const tomorrowStart = DateTime.now()
+        .setZone(timezone)
+        .plus({ days: 1 })
+        .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const tomorrowEnd = tomorrowStart.plus({ days: 1 });
+
+    const filteredArray = dataArray.filter(item => {
+        const itemDateTime = DateTime.fromISO(item.time, { zone: timezone });
+        return itemDateTime >= tomorrowStart && itemDateTime < tomorrowEnd;
+    });
+
+    return filteredArray;
 };

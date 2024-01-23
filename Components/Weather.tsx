@@ -18,8 +18,10 @@ import {weatherObjType} from '../ReduxToolkit/Reducers/currentWeatherSlice';
 import {
   capitalizeFirstLetter,
   timeStringConvertor,
+  tomorrowHoursExtractor,
 } from '../utils/dateTimeUtils';
 import {useAppSelector} from '../ReduxToolkit/hooks';
+import {hourType} from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
 
 const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
 const HourlyForecastMemoized = React.memo(HourlyForecast);
@@ -32,15 +34,28 @@ type weatherDataType = {
   icon: IconProp;
 };
 
-export default function Weather({
-  weatherData,
-  showHourCard,
-}: {
-  weatherData: weatherObjType;
-  showHourCard: boolean;
-}) {
+export default function Weather({weatherData}: {weatherData: weatherObjType}) {
   const {locationData} = useAppSelector(state => state.locationReducer);
+  const {hourWeather} = useAppSelector(state => state.hourWeather);
   const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
+  const selectedForecast = useAppSelector(
+    state => state.setState.selectedForecast,
+  );
+  const [hourCardData, setHourCardData] = useState<Array<hourType>>([]);
+  const [timeString, setTimeString] = useState<string>('');
+
+  useEffect(() => {
+    if (selectedForecast === 'today') {
+      setHourCardData(hourWeather.forecast);
+    } else if (selectedForecast === 'tomorrow') {
+      if (locationData.timezone !== undefined) {
+        setHourCardData(
+          tomorrowHoursExtractor(hourWeather.forecast, locationData.timezone),
+        );
+      }
+    }
+  }, [hourWeather, locationData]);
+
   useEffect(() => {
     if (locationData.timezone !== undefined) {
       setOptions({
@@ -53,6 +68,22 @@ export default function Weather({
       });
     }
   }, [locationData]);
+
+  useEffect(() => {
+    if (selectedForecast === 'tomorrow') {
+      const date = new Date(weatherData?.time);
+      setTimeString(
+        date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric',
+        }),
+      );
+    } else if (selectedForecast === 'today') {
+      setTimeString(timeStringConvertor(weatherData?.time, options));
+    }
+  }, [weatherData, selectedForecast, timeString]);
+
   // Array to map weather detail cards
   const weatherDetailCardData: Array<weatherDataType> = [
     {
@@ -96,7 +127,7 @@ export default function Weather({
           <View style={styles.weatherContainer}>
             <View style={styles.weatherDetails}>
               <Text style={[styles.lastUpdateTime, styles.textColor]}>
-                {timeStringConvertor(weatherData?.time, options)}
+                {timeString}
               </Text>
               <View style={styles.tempWrapper}>
                 <View>
@@ -134,12 +165,9 @@ export default function Weather({
             ))}
           </View>
         </View>
-        {showHourCard && (
-          <>
-            <HourlyForecastMemoized />
-            <RainChanceMemoized />
-          </>
-        )}
+
+        <HourlyForecastMemoized hourCardData={hourCardData} />
+        <RainChanceMemoized hourCardData={hourCardData} />
         <WeekForecastMemoized />
       </ImageBackground>
     </View>
