@@ -16,7 +16,6 @@ export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWe
             tz: funcData.timezone,
             periods: 48,
             dataset: 'full',
-            history: false
         },
         headers: {
             'X-RapidAPI-Key': API_KEY,

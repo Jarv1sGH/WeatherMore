@@ -1,6 +1,7 @@
 import { hourType } from "../ReduxToolkit/Reducers/hourlyWeatherSlice";
-
 const { DateTime } = require('luxon');
+
+
 export const formatDateString = (inputDateString: string,): string => {
     const inputDate = new Date(inputDateString);
     const currentDate = new Date();
@@ -80,3 +81,4 @@ export const tomorrowHoursExtractor = (dataArray: Array<hourType>, timezone: str
 
     return filteredArray;
 };
+

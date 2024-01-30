@@ -1,15 +1,16 @@
 import {Text, View, Pressable, Animated, Image} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import {styles} from '../Styles/DailyForecastStyles';
-import {
-  fetchDailyWeather,
-  DailyObjType,
-} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
-import {useAppDispatch, useAppSelector} from '../ReduxToolkit/hooks';
+import {DailyObjType} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
+import {useAppSelector} from '../ReduxToolkit/hooks';
 import {formatDateString, uvIndexString} from '../utils/dateTimeUtils';
+import {IconSelector} from '../utils/iconUtils';
 
 const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [iconSource, setIconSource] = useState<string>(
+    require('./../assets/icons/dxxx.png'),
+  );
   const cardHeight = useRef(new Animated.Value(70)).current;
 
   const handlePress = (): void => {
@@ -22,7 +23,13 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
   };
   const formattedDate = formatDateString(dailyDataObj.date);
   const uvIndexStr: string = uvIndexString(dailyDataObj.uvIndex);
-  // Todo -  some times values can be null add a check for that
+
+  useEffect(() => {
+    if (dailyDataObj !== undefined) {
+      setIconSource(IconSelector(dailyDataObj.symbol));
+    }
+  }, [dailyDataObj]);
+
   return (
     <Pressable
       onPress={() => {
@@ -47,7 +54,8 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
               <View style={styles.weatherIconWrapper}>
                 <Image
                   style={styles.weatherIcon}
-                  source={require('./../assets/icons/d320.png')}
+                  //@ts-ignore
+                  source={iconSource}
                 />
               </View>
               <View style={styles.weatherTemp}>
@@ -71,7 +79,9 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
                 {dailyDataObj.maxRelHumidity} %
               </Text>
               <Text style={[styles.cardText, styles.cardTextColor]}>
-                {uvIndexStr}, {dailyDataObj.uvIndex}
+                {uvIndexStr === ''
+                  ? `${dailyDataObj.uvIndex} `
+                  : `${uvIndexStr}, ${dailyDataObj.uvIndex}`}
               </Text>
               <Text style={[styles.cardText, styles.cardTextColor]}>
                 {dailyDataObj.sunrise.slice(0, -3)},

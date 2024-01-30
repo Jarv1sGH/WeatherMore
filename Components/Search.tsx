@@ -1,5 +1,5 @@
 import {View, Text, Pressable, TextInput, ScrollView} from 'react-native';
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {styles} from '../Styles/SearchStyles';
 import {
   faArrowLeft,
@@ -9,16 +9,59 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useAppDispatch, useAppSelector} from '../ReduxToolkit/hooks';
 import {setSearchClicked} from '../ReduxToolkit/Reducers/reducers';
+import {
+  LocationObjType,
+  clearSearchData,
+  searchLocation,
+} from '../ReduxToolkit/Reducers/searchLocationSlice';
+import {
+  fetchLocationString,
+  setLocationData,
+} from '../ReduxToolkit/Reducers/locationStringSlice';
 
 const Search = () => {
   const inputRef = useRef<TextInput>(null);
   const dispatch = useAppDispatch();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [debounceTime, setDebounceTime] = useState<NodeJS.Timeout | null>(null);
+  const {locations} = useAppSelector(state => state.searchResults);
+  // const {locationData} = useAppSelector(state => state.locationReducer);
+  const handleInputChange = (text: string) => {
+    setSearchQuery(text);
+    if (text === '' || text.length === 1) {
+      if (debounceTime) {
+        clearTimeout(debounceTime);
+      }
+      return;
+    }
+
+    if (debounceTime) {
+      clearTimeout(debounceTime);
+    }
+    const newDebounceTime = setTimeout(() => {
+      dispatch(searchLocation(text));
+    }, 500);
+    setDebounceTime(newDebounceTime);
+  };
 
   // focuses the search input once the component renders
   useEffect(() => {
     inputRef.current?.focus();
     inputRef.current?.setNativeProps({selection: {start: 0, end: -1}});
   }, []);
+
+  const setSearchLocation = (item: LocationObjType) => {
+    dispatch(
+      setLocationData({
+        city: item.name,
+        countryName: item.country,
+        id: item.id,
+        timezone: item.timezone,
+      }),
+    );
+    dispatch(setSearchClicked(false));
+    dispatch(clearSearchData());
+  };
 
   return (
     <View style={styles.searchContainer}>
@@ -27,6 +70,7 @@ const Search = () => {
           style={{justifyContent: 'center'}}
           onPress={() => {
             dispatch(setSearchClicked(false));
+            dispatch(clearSearchData());
           }}>
           <FontAwesomeIcon icon={faArrowLeft} size={25} />
         </Pressable>
@@ -34,7 +78,9 @@ const Search = () => {
           <TextInput
             ref={inputRef}
             style={styles.searchTextInput}
-            placeholder="Search locations"
+            placeholder="Search For Places"
+            onChangeText={handleInputChange}
+            value={searchQuery}
           />
         </View>
       </View>
@@ -48,16 +94,23 @@ const Search = () => {
             <Text style={[styles.searchResultText, {padding: 0}]}>
               New Delhi
             </Text>
-            <Text style={{fontSize: 15}}> Your location</Text>
+            <Text style={{fontSize: 15, color: '#262626'}}> Your location</Text>
           </View>
         </Pressable>
+
         <ScrollView>
-          <Pressable
-            onPress={() => console.log('first')}
-            style={styles.searchResultCard}>
-            <FontAwesomeIcon icon={faLocationArrow} size={22} />
-            <Text style={styles.searchResultText}>New Delhi, India</Text>
-          </Pressable>
+          {locations.locations &&
+            locations.locations.slice(0, 10).map(item => (
+              <Pressable
+                key={item.id}
+                onPress={() => setSearchLocation(item)}
+                style={styles.searchResultCard}>
+                <FontAwesomeIcon icon={faLocationArrow} size={22} />
+                <Text style={styles.searchResultText}>
+                  {item.name}, {item.country}
+                </Text>
+              </Pressable>
+            ))}
         </ScrollView>
       </View>
     </View>

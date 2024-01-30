@@ -10,8 +10,8 @@ export const styles = StyleSheet.create({
   },
   weatherOuter: {},
   weatherIcon: {
-    width: 85,
-    height: 85,
+    width: 75,
+    height: 75,
   },
   weatherContainer: {
     height: 400,

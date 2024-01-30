@@ -71,7 +71,7 @@ const WeekForecast = () => {
         <View style={styles.iconWrapper}>
           <FontAwesomeIcon icon={faCalendarDays} size={16} />
         </View>
-        <Text style={styles.headingText}>Week</Text>
+        <Text style={styles.headingText}>Weekly High</Text>
       </View>
       <View style={styles.lineChartWrapper}>
         {temperatureData.length > 0 && data !== undefined && (

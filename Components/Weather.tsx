@@ -22,6 +22,7 @@ import {
 } from '../utils/dateTimeUtils';
 import {useAppSelector} from '../ReduxToolkit/hooks';
 import {hourType} from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
+import {IconSelector} from '../utils/iconUtils';
 
 const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
 const HourlyForecastMemoized = React.memo(HourlyForecast);
@@ -43,6 +44,9 @@ export default function Weather({weatherData}: {weatherData: weatherObjType}) {
   );
   const [hourCardData, setHourCardData] = useState<Array<hourType>>([]);
   const [timeString, setTimeString] = useState<string>('');
+  const [iconSource, setIconSource] = useState<string>(
+    require('./../assets/icons/dxxx.png'),
+  );
 
   useEffect(() => {
     if (selectedForecast === 'today') {
@@ -64,7 +68,7 @@ export default function Weather({weatherData}: {weatherData: weatherObjType}) {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true,
-        timeZone: locationData?.timezone,
+        timeZone: locationData.timezone,
       });
     }
   }, [locationData]);
@@ -83,6 +87,12 @@ export default function Weather({weatherData}: {weatherData: weatherObjType}) {
       setTimeString(timeStringConvertor(weatherData?.time, options));
     }
   }, [weatherData, selectedForecast, timeString]);
+
+  useEffect(() => {
+    if (weatherData !== undefined) {
+      setIconSource(IconSelector(weatherData?.symbol));
+    }
+  }, [weatherData]);
 
   // Array to map weather detail cards
   const weatherDetailCardData: Array<weatherDataType> = [
@@ -144,10 +154,11 @@ export default function Weather({weatherData}: {weatherData: weatherObjType}) {
 
                 <View style={styles.icon}>
                   <Image
+                    //@ts-ignore
+                    source={iconSource}
                     style={styles.weatherIcon}
-                    source={require('./../assets/icons/d320.png')}
                   />
-                  <Text>
+                  <Text style={{marginTop: 5}}>
                     {capitalizeFirstLetter(weatherData?.symbolPhrase)}
                   </Text>
                 </View>

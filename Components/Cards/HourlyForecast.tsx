@@ -6,6 +6,7 @@ import {faClock} from '@fortawesome/free-regular-svg-icons';
 import {useAppSelector} from '../../ReduxToolkit/hooks';
 import {timeStringConvertor} from '../../utils/dateTimeUtils';
 import {hourType} from '../../ReduxToolkit/Reducers/hourlyWeatherSlice';
+import {IconSelector} from '../../utils/iconUtils';
 
 const HourlyForecast = ({hourCardData}: {hourCardData: Array<hourType>}) => {
   const {locationData} = useAppSelector(state => state.locationReducer);
@@ -13,6 +14,9 @@ const HourlyForecast = ({hourCardData}: {hourCardData: Array<hourType>}) => {
     state => state.setState.selectedForecast,
   );
   const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
+  const [iconSources, setIconSources] = useState<string[]>(
+    Array(6).fill(require('../../assets/icons/dxxx.png')),
+  );
   const [startIndex, setStartIndex] = useState<number>(0);
   const [stopIndex, setStopIndex] = useState<number>(6);
   useEffect(() => {
@@ -31,6 +35,13 @@ const HourlyForecast = ({hourCardData}: {hourCardData: Array<hourType>}) => {
     }
   }, [selectedForecast]);
 
+  useEffect(() => {
+    const newIconSources = hourCardData
+      .slice(startIndex, stopIndex)
+      .map(item => IconSelector(item.symbol));
+    setIconSources(newIconSources);
+  }, [hourCardData, startIndex, stopIndex]);
+
   return (
     <View style={styles.hourlyContainer}>
       <View style={styles.headingContainer}>
@@ -41,15 +52,20 @@ const HourlyForecast = ({hourCardData}: {hourCardData: Array<hourType>}) => {
       </View>
       <View style={styles.hourlyTempsWrapper}>
         {hourCardData &&
-          hourCardData.slice(startIndex, stopIndex).map(item => (
+          hourCardData.slice(startIndex, stopIndex).map((item, index) => (
             <View key={item.time} style={styles.hourTempsContainer}>
               <Text style={[styles.hourTempText]}>
                 {timeStringConvertor(item.time, options)}
               </Text>
-              <Image
-                source={require('../../assets/icons/d320.png')}
-                style={styles.weatherIcons}
-              />
+              {iconSources[index] ? (
+                <Image
+                  //@ts-ignore
+                  source={iconSources[index]}
+                  style={styles.weatherIcons}
+                />
+              ) : (
+                <></>
+              )}
               <Text style={[styles.hourTempText, {fontSize: 16}]}>
                 {item.temperature}°
               </Text>

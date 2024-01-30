@@ -54,7 +54,7 @@ export default function App() {
       dispatch(fetchCurrentWeather(funcData));
       dispatch(fetchHourWeather(funcData));
 
-      // To avoid being rate limited
+      // To avoid being rate limited by Api
       setTimeout(() => {
         dispatch(fetchDailyWeather(funcData.id));
       }, 500);

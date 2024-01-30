@@ -5,6 +5,7 @@ import locationStringSlice from './Reducers/locationStringSlice';
 import currentWeatherSlice from './Reducers/currentWeatherSlice';
 import hourlyWeatherSlice from './Reducers/hourlyWeatherSlice';
 import dailyWeatherSlice from './Reducers/dailyWeatherSlice';
+import searchLocationSlice from './Reducers/searchLocationSlice';
 
 
 const store = configureStore({
@@ -14,6 +15,7 @@ const store = configureStore({
     currentWeather: currentWeatherSlice,
     hourWeather: hourlyWeatherSlice,
     dailyWeather: dailyWeatherSlice,
+    searchResults: searchLocationSlice,
   },
 });
 

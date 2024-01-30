@@ -19,17 +19,20 @@ export default function Header() {
     dispatch(setSearchClicked(true));
   };
 
+
+
   return (
     <View style={styles.Header}>
       <View style={styles.searchContainer}>
         <View style={styles.searchInputWrapper}>
-          {/* <Pressable>
-            <FontAwesomeIcon icon={faBars} size={20} />
-          </Pressable> */}
           <Pressable style={styles.searchInput} onPress={handlePress}>
             <TextInput
               placeholder="Search Location here..."
-              value={`${locationData.locality} , ${locationData.city}`}
+              value={
+                locationData.locality !== undefined
+                  ? `${locationData?.locality} , ${locationData.city}`
+                  : ` ${locationData.city},  ${locationData.countryName}`
+              }
               editable={false}
               style={{color: '#FFFAF0'}}
             />

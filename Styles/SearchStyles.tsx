@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     fontSize: 18,
     marginLeft: 5,
+    color: '#262626',
   },
   searchResults: {
     height: 'auto',

@@ -16,13 +16,14 @@ type GeoApiResType = {
 }
 export type locationDataType = {
     city: string,
-    countryCode: string,
-    locality: string,
+    countryCode?: string,
+    locality?: string,
     countryName: string,
-    principalSubdivision: string,
+    principalSubdivision?: string,
     id: number | null,
     timezone: string
 }
+
 export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLocationString', async (coordinates: coordinatesType): Promise<object> => {
 
     try {
@@ -34,7 +35,7 @@ export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLo
 
         const options = {
             method: 'GET',
-            url: `https://foreca-weather.p.rapidapi.com/location/search/${city}`,
+            url: `https://foreca-weather.p.rapidapi.com/location/search/${encodeURIComponent(city)}`,
             params: {
                 lang: 'en',
                 country: `${countryCode}`
@@ -67,7 +68,11 @@ const locationStringSlice = createSlice({
         locationData: {} as locationDataType,
         error: '' as string | undefined,
     },
-    reducers: {},
+    reducers: {
+        setLocationData: (state, action) => {
+            state.locationData = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchLocationString.pending, (state) => {
             state.loading = true
@@ -85,6 +90,6 @@ const locationStringSlice = createSlice({
 })
 
 
-
+export const { setLocationData } = locationStringSlice.actions;
 
 export default locationStringSlice.reducer;
