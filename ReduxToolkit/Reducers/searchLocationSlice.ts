@@ -45,13 +45,13 @@ const searchLocationSlice = createSlice({
         },
         error: '' as string | undefined
     },
-        reducers: {
-            clearSearchData: (state) => {
-                state.locations = {
-                    locations: []
-                };
-            },
+    reducers: {
+        clearSearchData: (state) => {
+            state.locations = {
+                locations: []
+            };
         },
+    },
     extraReducers: (builder) => {
         builder.addCase(searchLocation.pending, (state) => {
             state.loading = true;
@@ -61,7 +61,7 @@ const searchLocationSlice = createSlice({
             state.locations = action.payload;
         })
         builder.addCase(searchLocation.rejected, (state, action) => {
-            state.loading = true;
+            state.loading = false;
             state.error = action.error.message;
         })
     }

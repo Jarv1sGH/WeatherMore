@@ -61,7 +61,7 @@ const hourlyWeatherSlice = createSlice({
             state.hourWeather = action.payload;
         })
         builder.addCase(fetchHourWeather.rejected, (state, action) => {
-            state.loading = true;
+            state.loading = false;
             state.error = action.error.message;
         })
     }

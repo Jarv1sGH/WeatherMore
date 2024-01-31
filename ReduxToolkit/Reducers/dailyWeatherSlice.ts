@@ -62,7 +62,7 @@ const daillyWeatherSlice = createSlice({
             state.dailyWeather = action.payload;
         })
         builder.addCase(fetchDailyWeather.rejected, (state, action) => {
-            state.loading = true;
+            state.loading = false;
             state.error = action.error.message;
         })
     }

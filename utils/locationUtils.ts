@@ -66,7 +66,7 @@ export const getIPLocation = async (): Promise<{ lat: number; long: number } | n
 };
 
 
-//@ts-ignore (defining types for the arguments seems unnecessary)
+//@ts-ignore 
 export  const handleLocationData = async (dispatch , setLocationCoords): Promise<void> => {
     //Check for location permission
     const permissionGranted = await checkLocationPermission();

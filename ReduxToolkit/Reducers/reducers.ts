@@ -10,6 +10,7 @@ const componentSlice = createSlice({
     selectedForecast: 'today',
     searchClicked: false,
     locationCoords: {} as locationCoordsType,
+    lastFetchTime: 0
   },
   reducers: {
     setSelectedForecast: (state, action) => {
@@ -21,8 +22,11 @@ const componentSlice = createSlice({
     setLocationCoords: (state, action) => {
       state.locationCoords = action.payload;
     },
+    setLastFetchTime: (state, action) => {
+      state.lastFetchTime = action.payload;
+    },
   },
 });
 
-export const { setSelectedForecast, setSearchClicked, setLocationCoords } = componentSlice.actions;
+export const { setSelectedForecast, setSearchClicked, setLocationCoords, setLastFetchTime } = componentSlice.actions;
 export default componentSlice.reducer;
