@@ -17,6 +17,7 @@ import {handleLocationData} from '../utils/locationUtils';
 import {
   setLastFetchTime,
   setLocationCoords,
+  setSelectedForecast,
 } from '../ReduxToolkit/Reducers/reducers';
 import {fetchLocationString} from '../ReduxToolkit/Reducers/locationStringSlice';
 import {fetchCurrentWeather} from '../ReduxToolkit/Reducers/currentWeatherSlice';
@@ -38,7 +39,7 @@ export default function App() {
     useAppSelector(state => state.setState);
   const {locationData} = useAppSelector(state => state.locationReducer);
   const {currentWeather} = useAppSelector(state => state.currentWeather);
-  const {dailyWeather, loading} = useAppSelector(state => state.dailyWeather);
+  const {dailyWeather} = useAppSelector(state => state.dailyWeather);
 
   const fetchData = (): void => {
     if (locationData.id !== null && locationData.id !== undefined) {
@@ -61,6 +62,7 @@ export default function App() {
 
   const onRefresh = () => {
     setRefreshing(true);
+    dispatch(setSelectedForecast('today'));
   };
 
   // sets location coordinates
@@ -131,14 +133,17 @@ export default function App() {
                   />
                 </React.Suspense>
               )}
-              {selectedForecast === 'daily' && (
-                <View style={styles.forecastWrapper}>
-                  <React.Suspense fallback={<Loader />}>
-                    <DailyForecastMemoized />
-                  </React.Suspense>
-                </View>
-              )}
             </ScrollView>
+            {selectedForecast === 'daily' && (
+              <View style={styles.forecastWrapper}>
+                <React.Suspense fallback={<Loader />}>
+                  <DailyForecastMemoized
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                </React.Suspense>
+              </View>
+            )}
           </View>
         </>
       )}
@@ -155,6 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6EDFF',
   },
   forecastWrapper: {
-    flex: 1,
+    height: 'auto',
+    borderWidth: 1,
   },
 });

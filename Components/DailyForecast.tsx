@@ -1,4 +1,12 @@
-import {Text, View, Pressable, Animated, Image} from 'react-native';
+import {
+  Text,
+  View,
+  Pressable,
+  Animated,
+  Image,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import {styles} from '../Styles/DailyForecastStyles';
 import {DailyObjType} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
@@ -6,12 +14,18 @@ import {useAppSelector} from '../ReduxToolkit/hooks';
 import {formatDateString, uvIndexString} from '../utils/dateTimeUtils';
 import {IconSelector} from '../utils/iconUtils';
 
-const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
+const DailyForecastCard = ({
+  dailyDataObj,
+  index,
+}: {
+  dailyDataObj: DailyObjType;
+  index: number;
+}) => {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [iconSource, setIconSource] = useState<string>(
-    require('./../assets/icons/dxxx.png'),
-  );
+  const [iconSource, setIconSource] = useState<string | null>(null);
   const cardHeight = useRef(new Animated.Value(70)).current;
+
+  const isLastCard = index === 9;
 
   const handlePress = (): void => {
     setExpanded(!expanded);
@@ -38,6 +52,7 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
       <Animated.View
         style={[
           styles.dailyCardWrapper,
+          isLastCard && {marginBottom: 10},
           {
             height: cardHeight,
           },
@@ -52,11 +67,13 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
             </View>
             <View style={styles.cardRight}>
               <View style={styles.weatherIconWrapper}>
-                <Image
-                  style={styles.weatherIcon}
-                  //@ts-ignore
-                  source={iconSource}
-                />
+                {iconSource !== null && (
+                  <Image
+                    style={styles.weatherIcon}
+                    //@ts-ignore
+                    source={iconSource}
+                  />
+                )}
               </View>
               <View style={styles.weatherTemp}>
                 <Text style={styles.tempText}>{dailyDataObj.maxTemp}°</Text>
@@ -95,17 +112,30 @@ const DailyForecastCard = ({dailyDataObj}: {dailyDataObj: DailyObjType}) => {
   );
 };
 
-export default function DailyForecast() {
+export default function DailyForecast({
+  refreshing,
+  onRefresh,
+}: {
+  refreshing: boolean;
+  onRefresh: () => void;
+}) {
   const {dailyWeather} = useAppSelector(state => state.dailyWeather);
 
   return (
     <View style={styles.dailyWeatherContainer}>
-      {dailyWeather &&
-        dailyWeather.forecast
-          .slice(0, 10)
-          .map(item => (
-            <DailyForecastCard key={item.date} dailyDataObj={item} />
-          ))}
+      <FlatList
+        data={dailyWeather.forecast.slice(0, 10)}
+        renderItem={({item, index}) => (
+          <DailyForecastCard
+            key={item.date}
+            dailyDataObj={item}
+            index={index}
+          />
+        )}
+        keyExtractor={item => item.date}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
     </View>
   );
 }
