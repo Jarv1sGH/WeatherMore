@@ -1,31 +1,32 @@
 import {
   StyleSheet,
   SafeAreaView,
-  Text,
   View,
   StatusBar,
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
 const Weather = React.lazy(() => import('./Weather'));
 const DailyForecast = React.lazy(() => import('./DailyForecast'));
-import {useAppDispatch, useAppSelector} from '../ReduxToolkit/hooks';
+import { useAppDispatch, useAppSelector } from '../ReduxToolkit/hooks';
 import Search from './Search';
-import {handleLocationData} from '../utils/locationUtils';
+import { handleLocationData } from '../utils/locationUtils';
 import {
+  setColorPalette,
   setLastFetchTime,
   setLocationCoords,
   setSelectedForecast,
 } from '../ReduxToolkit/Reducers/reducers';
-import {fetchLocationString} from '../ReduxToolkit/Reducers/locationStringSlice';
-import {fetchCurrentWeather} from '../ReduxToolkit/Reducers/currentWeatherSlice';
-import {fetchHourWeather} from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
-import {fetchDailyWeather} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
-import {weatherObjType} from '../ReduxToolkit/Reducers/currentWeatherSlice';
-import {createWeatherObj} from '../utils/ApiUtils';
+import { fetchLocationString } from '../ReduxToolkit/Reducers/locationStringSlice';
+import { fetchCurrentWeather } from '../ReduxToolkit/Reducers/currentWeatherSlice';
+import { fetchHourWeather } from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
+import { fetchDailyWeather } from '../ReduxToolkit/Reducers/dailyWeatherSlice';
+import { weatherObjType } from '../ReduxToolkit/Reducers/currentWeatherSlice';
+import { createWeatherObj } from '../utils/ApiUtils';
 import Loader from './Loader';
+import { colorPaletteSetter } from '../utils/iconUtils';
 const WeatherMemoized = React.memo(Weather);
 const DailyForecastMemoized = React.memo(DailyForecast);
 
@@ -35,11 +36,11 @@ export default function App() {
   const [tomorrowWeatherData, setTomorrowWeatherData] =
     useState<weatherObjType | null>(null);
 
-  const {selectedForecast, lastFetchTime, searchClicked, locationCoords} =
+  const { selectedForecast, lastFetchTime, searchClicked, locationCoords, colorPalette } =
     useAppSelector(state => state.setState);
-  const {locationData} = useAppSelector(state => state.locationReducer);
-  const {currentWeather} = useAppSelector(state => state.currentWeather);
-  const {dailyWeather} = useAppSelector(state => state.dailyWeather);
+  const { locationData } = useAppSelector(state => state.locationReducer);
+  const { currentWeather } = useAppSelector(state => state.currentWeather);
+  const { dailyWeather } = useAppSelector(state => state.dailyWeather);
 
   const fetchData = (): void => {
     if (locationData.id !== null && locationData.id !== undefined) {
@@ -71,7 +72,6 @@ export default function App() {
   }, []);
 
   // uses the location coordinates to fetch the location string id from api
-
   useEffect(() => {
     if (locationCoords.lat !== undefined && locationCoords.long !== undefined) {
       dispatch(fetchLocationString(locationCoords));
@@ -106,10 +106,27 @@ export default function App() {
       setTomorrowWeatherData(createWeatherObj(dailyWeather.forecast[1]));
   }, [dailyWeather]);
 
+
+
+  useEffect(() => {
+    if (selectedForecast === 'today') {
+      if (currentWeather.current.symbol) {
+        dispatch(setColorPalette(colorPaletteSetter(currentWeather.current.symbol)))
+      }
+    }
+    if (selectedForecast === 'tomorrow') {
+      if (tomorrowWeatherData?.symbol) {
+        dispatch(setColorPalette(colorPaletteSetter(tomorrowWeatherData?.symbol)))
+      }
+    }
+    if (selectedForecast === 'daily') {
+      dispatch(setColorPalette(colorPaletteSetter('')))
+    }
+
+  }, [selectedForecast, currentWeather, tomorrowWeatherData])
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <StatusBar backgroundColor={'#E1D3FA'} barStyle={'dark-content'} />
-
+      <StatusBar backgroundColor={searchClicked === true ? '#E1D3FA' : colorPalette.headerColor} barStyle={'dark-content'} />
       {searchClicked === true ? (
         <Search />
       ) : (
@@ -161,6 +178,5 @@ const styles = StyleSheet.create({
   },
   forecastWrapper: {
     height: 'auto',
-    borderWidth: 1,
   },
 });

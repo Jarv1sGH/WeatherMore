@@ -1,7 +1,7 @@
-import {Text, View, Image, ImageBackground} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from '../Styles/WeatherStyles';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import { Text, View, Image, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { styles } from '../Styles/WeatherStyles';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import {
   faCloudRain,
   faDroplet,
@@ -14,20 +14,21 @@ import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
 import WeekForecast from './Cards/WeekForecast';
 import RainChance from './Cards/RainChanceCard';
-import {weatherObjType} from '../ReduxToolkit/Reducers/currentWeatherSlice';
+import { weatherObjType } from '../ReduxToolkit/Reducers/currentWeatherSlice';
 import {
   capitalizeFirstLetter,
   timeStringConvertor,
   tomorrowHoursExtractor,
 } from '../utils/dateTimeUtils';
-import {useAppSelector} from '../ReduxToolkit/hooks';
-import {hourType} from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
-import {IconSelector} from '../utils/iconUtils';
-
+import { useAppSelector } from '../ReduxToolkit/hooks';
+import { hourType } from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
+import { IconSelector } from '../utils/iconUtils';
+import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg'
 const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
 const HourlyForecastMemoized = React.memo(HourlyForecast);
 const RainChanceMemoized = React.memo(RainChance);
 const WeekForecastMemoized = React.memo(WeekForecast);
+
 
 type weatherDataType = {
   name: string;
@@ -35,12 +36,13 @@ type weatherDataType = {
   icon: IconProp;
 };
 
-export default function Weather({weatherData}: {weatherData: weatherObjType}) {
-  const {locationData} = useAppSelector(state => state.locationReducer);
-  const {hourWeather} = useAppSelector(state => state.hourWeather);
+export default function Weather({ weatherData }: { weatherData: weatherObjType }) {
+  const { locationData } = useAppSelector(state => state.locationReducer);
+  const { hourWeather } = useAppSelector(state => state.hourWeather);
   const [options, setOptions] = useState<Intl.DateTimeFormatOptions>({});
-  const selectedForecast = useAppSelector(
-    state => state.setState.selectedForecast,
+
+  const { selectedForecast, colorPalette } = useAppSelector(
+    state => state.setState,
   );
   const [hourCardData, setHourCardData] = useState<Array<hourType>>([]);
   const [timeString, setTimeString] = useState<string>('');
@@ -103,7 +105,7 @@ export default function Weather({weatherData}: {weatherData: weatherObjType}) {
     },
     {
       name: 'Rain Chance',
-      value: `${weatherData?.precipProb} % `,
+      value: `${weatherData?.precipProb}% `,
       icon: faCloudRain,
     },
     {
@@ -130,57 +132,60 @@ export default function Weather({weatherData}: {weatherData: weatherObjType}) {
 
   return (
     <View style={styles.weatherOuter}>
-      <ImageBackground
-        source={require('./../assets/bcg/bcg.jpg')}
-        style={styles.backgroundImage}>
-        <View>
-          <View style={styles.weatherContainer}>
-            <View style={styles.weatherDetails}>
-              <Text style={[styles.lastUpdateTime, styles.textColor]}>
-                {timeString}
-              </Text>
-              <View style={styles.tempWrapper}>
-                <View>
-                  <View style={styles.tempInnerWrapper}>
-                    <Text style={[styles.temperature, styles.textColor]}>
-                      {weatherData?.temperature}
-                    </Text>
-                    <Text style={[styles.unit, styles.textColor]}>°C</Text>
-                  </View>
-                  <Text style={[styles.textColor, styles.textWidth]}>
-                    Feels like {weatherData?.feelsLikeTemp}°
-                  </Text>
-                </View>
+      <Svg height="100%" width="100%" style={{ zIndex: 0, position: 'absolute' }}>
+        <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <Stop offset={colorPalette.offset1} stopColor={colorPalette.gradientColor1} stopOpacity="1" />
+          <Stop offset={colorPalette.offset2} stopColor={colorPalette.gradientColor2} stopOpacity="1" />
+        </LinearGradient>
+        <Rect x="0" y="0" width="100%" height="100%" fill="url(#grad)" />
+      </Svg>
 
-                <View style={styles.icon}>
-                  <Image
-                    //@ts-ignore
-                    source={iconSource}
-                    style={styles.weatherIcon}
-                  />
-                  <Text style={{marginTop: 5}}>
-                    {capitalizeFirstLetter(weatherData?.symbolPhrase)}
+      <View>
+        <View style={styles.weatherContainer}>
+          <View style={styles.weatherDetails}>
+            <Text style={[styles.lastUpdateTime, styles.textColor]}>
+              {timeString}
+            </Text>
+            <View style={styles.tempWrapper}>
+              <View>
+                <View style={styles.tempInnerWrapper}>
+                  <Text style={[styles.temperature, styles.textColor]}>
+                    {weatherData?.temperature}
                   </Text>
+                  <Text style={[styles.unit, styles.textColor]}>°C</Text>
                 </View>
+                <Text style={[styles.textColor, styles.textWidth]}>
+                  Feels like {weatherData?.feelsLikeTemp}°
+                </Text>
+              </View>
+
+              <View style={styles.icon}>
+                <Image
+                  //@ts-ignore
+                  source={iconSource}
+                  style={styles.weatherIcon}
+                />
+                <Text style={{ marginTop: 5 }}>
+                  {capitalizeFirstLetter(weatherData?.symbolPhrase)}
+                </Text>
               </View>
             </View>
           </View>
-          <View style={styles.weatherDetailCardsWrapper}>
-            {weatherDetailCardData.map(item => (
-              <WeatherDetailCardMemoized
-                key={item.name}
-                icon={item.icon}
-                name={item.name}
-                value={item.value}
-              />
-            ))}
-          </View>
         </View>
-
-        <HourlyForecastMemoized hourCardData={hourCardData} />
-        <RainChanceMemoized hourCardData={hourCardData} />
-        <WeekForecastMemoized />
-      </ImageBackground>
+        <View style={styles.weatherDetailCardsWrapper}>
+          {weatherDetailCardData.map(item => (
+            <WeatherDetailCardMemoized
+              key={item.name}
+              icon={item.icon}
+              name={item.name}
+              value={item.value}
+            />
+          ))}
+        </View>
+      </View>
+      <HourlyForecastMemoized hourCardData={hourCardData} />
+      <RainChanceMemoized hourCardData={hourCardData} />
+      <WeekForecastMemoized />
     </View>
   );
 }

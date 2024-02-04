@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {iconWrapper as iconWrapperStyle} from './HourlyForecastStyles';
+import { StyleSheet } from 'react-native';
+import { iconWrapper as iconWrapperStyle } from './HourlyForecastStyles';
 
 export const styles = StyleSheet.create({
   textColor: {
@@ -8,14 +8,16 @@ export const styles = StyleSheet.create({
   textWidth: {
     fontWeight: '400',
   },
-  weatherOuter: {},
+  weatherOuter: {
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+  },
   weatherIcon: {
     width: 75,
     height: 75,
   },
   weatherContainer: {
     height: 400,
-    // borderWidth: 1,
   },
   weatherDetails: {
     width: '95%',
@@ -58,7 +60,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    // borderWidth: 2,
   },
   weatherDetailCard: {
     opacity: 0.75,
@@ -78,5 +79,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '65%',
   },
-  iconWrapper: {...iconWrapperStyle},
+  iconWrapper: { ...iconWrapperStyle },
 });

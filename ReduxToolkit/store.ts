@@ -12,25 +12,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const locationStringPersistConfig = {
   key: 'locationReducer',
   storage: AsyncStorage,
-  whitelist: ['locationData'], // Adjust the whitelist as needed
+  whitelist: ['locationData'],
 };
 
 const currentWeatherPersistConfig = {
   key: 'currentWeather',
   storage: AsyncStorage,
-  whitelist: ['currentWeather'], // Adjust the whitelist as needed
+  whitelist: ['currentWeather'],
 };
 
 const hourlyWeatherPersistConfig = {
   key: 'hourWeather',
   storage: AsyncStorage,
-  whitelist: ['hourWeather'], // Adjust the whitelist as needed
+  whitelist: ['hourWeather'],
 };
 
 const dailyWeatherPersistConfig = {
   key: 'dailyWeather',
   storage: AsyncStorage,
-  whitelist: ['dailyWeather'], // Adjust the whitelist as needed
+  whitelist: ['dailyWeather'],
 };
 
 

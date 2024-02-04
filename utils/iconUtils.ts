@@ -1,3 +1,5 @@
+import { colorPaletteType } from "../ReduxToolkit/Reducers/reducers";
+
 type weatherIconsObjType = {
     [key: string]: string
 }
@@ -86,9 +88,79 @@ const weatherIcons: weatherIconsObjType = {
 };
 
 
-
 export const IconSelector = (symbol: string): string => {
 
     const iconPath = weatherIcons[symbol] || weatherIcons.default;
     return iconPath;
 };
+
+
+
+
+const partlyCloudyGradient = ['200', '500', '210', '310']
+const rainGradient = ['300', '400', '600', '410', '220', '320', '420', '430', '240', '340', '440', '211', '311', '411', '221', '321', '421']
+const snowGradient = ['431', '212', '312', '412', '222', '322', '422', '432']
+export const colorPaletteSetter = (symbol: string): colorPaletteType => {
+    //clear day
+    if (symbol === 'd000' || symbol === 'd100') {
+        return {
+            gradientColor1: '#59BEF2',
+            gradientColor2: '#94CECE',
+            offset1: '0%',
+            offset2: '100%',
+            headerColor: '#3C8AC9'
+        }
+    }
+    // clear night
+    if (symbol === 'n000' || symbol === 'n100') {
+        return {
+            gradientColor1: '#E88DBA',
+            gradientColor2: '#363B92',
+            offset1: '0%',
+            offset2: '100%',
+            headerColor: '#c46bd6'
+        }
+    }
+
+    // partly cloudy or thin upper clouds or light rain
+    if (partlyCloudyGradient.includes(symbol.slice(1))) {
+        return {
+            gradientColor1: '#D3D3D3',
+            gradientColor2: '#87CEEB',
+            offset1: '0%',
+            offset2: '100%',
+            headerColor: '#bfe5f5'
+        }
+    }
+    // Rain , thunderstorms or overcast
+    if (rainGradient.includes(symbol.slice(1))) {
+        return {
+            gradientColor1: '#0C194C',
+            gradientColor2: '#92A9C0',
+            offset1: '100%',
+            offset2: '0%',
+            headerColor: '#749cd4'
+        }
+    }
+
+    // snow
+    if (snowGradient.includes(symbol.slice(1))) {
+        return {
+            gradientColor1: '#1D2940',
+            gradientColor2: '#7C94B5',
+            offset1: '100%',
+            offset2: '50%',
+            headerColor: '#749cd4'
+        }
+    }
+
+    else {
+        return {
+            gradientColor2: '#39319E',
+            gradientColor1: '#D477D3',
+            offset1: '0%',
+            offset2: '100%',
+            headerColor: '#E1D3FA'
+        }
+    }
+}

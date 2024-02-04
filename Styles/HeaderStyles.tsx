@@ -1,14 +1,20 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 export const styles = StyleSheet.create({
   Header: {
-    backgroundColor: '#E1D3FA',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    // backgroundColor: '#749cd4',
+    borderBottomLeftRadius: 2,
+    borderBottomRightRadius: 2,
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   searchContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+
   },
 
   searchInputWrapper: {
@@ -22,11 +28,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#9C7BB6',
     borderRadius: 5,
+    ...Platform.select({
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   searchInput: {
     width: '85%',
     marginLeft: 4,
-    
+
   },
   forecastButtonsWrapper: {
     width: '92%',
@@ -47,6 +58,11 @@ export const styles = StyleSheet.create({
   },
   selectedOption: {
     backgroundColor: '#E0B6FF',
+    ...Platform.select({
+      android: {
+        elevation: 18,
+      },
+    }),
   },
   optionText: {
     fontWeight: '600',

@@ -1,20 +1,20 @@
-import {Text, View, TextInput, Pressable, Animated} from 'react-native';
-import React, {useEffect} from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faBars, faSearch} from '@fortawesome/free-solid-svg-icons';
-import {styles} from '../Styles/HeaderStyles';
+import { Text, View, TextInput, Pressable, Animated } from 'react-native';
+import React, { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { styles } from '../Styles/HeaderStyles';
 import {
   setSearchClicked,
   setSelectedForecast,
 } from '../ReduxToolkit/Reducers/reducers';
-import {useAppSelector, useAppDispatch} from '../ReduxToolkit/hooks';
+import { useAppSelector, useAppDispatch } from '../ReduxToolkit/hooks';
 
 export default function Header() {
   const dispatch = useAppDispatch();
-  const selectedForecast = useAppSelector(
-    state => state.setState.selectedForecast,
+  const { selectedForecast, colorPalette } = useAppSelector(
+    state => state.setState,
   );
-  const {locationData} = useAppSelector(state => state.locationReducer);
+  const { locationData } = useAppSelector(state => state.locationReducer);
   const handlePress = () => {
     dispatch(setSearchClicked(true));
   };
@@ -22,7 +22,7 @@ export default function Header() {
 
 
   return (
-    <View style={styles.Header}>
+    <View style={[styles.Header, { backgroundColor: colorPalette.headerColor }]}>
       <View style={styles.searchContainer}>
         <View style={styles.searchInputWrapper}>
           <Pressable style={styles.searchInput} onPress={handlePress}>
@@ -34,7 +34,7 @@ export default function Header() {
                   : ` ${locationData.city},  ${locationData.countryName}`
               }
               editable={false}
-              style={{color: '#FFFAF0'}}
+              style={{ color: '#FFFAF0' }}
             />
           </Pressable>
           <Pressable>
