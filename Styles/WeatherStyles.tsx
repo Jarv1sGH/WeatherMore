@@ -9,8 +9,6 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
   },
   weatherOuter: {
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
   },
   weatherIcon: {
     width: 75,

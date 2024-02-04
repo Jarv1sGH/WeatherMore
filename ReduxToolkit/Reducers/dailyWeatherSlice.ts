@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"; import axios from "axios";
 
 import { API_KEY } from "@env";
+import { DailyObjType } from "../../utils/Types";
 
 export const fetchDailyWeather = createAsyncThunk('dailyWeatherSlice/fetchDailyWeather', async (id: number) => {
     const options = {
@@ -26,22 +27,6 @@ export const fetchDailyWeather = createAsyncThunk('dailyWeatherSlice/fetchDailyW
     }
 })
 
-export type DailyObjType = {
-    date: string,
-    minTemp: number,
-    maxTemp: number,
-    symbol: string,
-    symbolPhrase: string,
-    maxWindSpeed: number,
-    sunrise: string,
-    sunset: string,
-    uvIndex: number,
-    maxRelHumidity: number,
-    maxFeelsLikeTemp: number,
-    maxDewPoint: number,
-    precipProb: number,
-    pressure: number,
-}
 
 const daillyWeatherSlice = createSlice({
     name: 'daillyWeatherSlice',

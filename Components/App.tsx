@@ -23,10 +23,10 @@ import { fetchLocationString } from '../ReduxToolkit/Reducers/locationStringSlic
 import { fetchCurrentWeather } from '../ReduxToolkit/Reducers/currentWeatherSlice';
 import { fetchHourWeather } from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
 import { fetchDailyWeather } from '../ReduxToolkit/Reducers/dailyWeatherSlice';
-import { weatherObjType } from '../ReduxToolkit/Reducers/currentWeatherSlice';
 import { createWeatherObj } from '../utils/ApiUtils';
 import Loader from './Loader';
 import { colorPaletteSetter } from '../utils/iconUtils';
+import { weatherObjType } from '../utils/Types';
 const WeatherMemoized = React.memo(Weather);
 const DailyForecastMemoized = React.memo(DailyForecast);
 

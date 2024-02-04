@@ -1,28 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_KEY } from '@env';
 import axios, { AxiosResponse } from 'axios'
+import { GeoApiResType, coordinatesType, locationDataType } from '../../utils/Types';
 
-type coordinatesType = {
-    lat: number,
-    long: number
-}
-
-type GeoApiResType = {
-    city: string,
-    countryCode: string,
-    locality: string,
-    countryName: string,
-    principalSubdivision: string,
-}
-export type locationDataType = {
-    city: string,
-    countryCode?: string,
-    locality?: string,
-    countryName: string,
-    principalSubdivision?: string,
-    id: number | null,
-    timezone: string
-}
 
 export const fetchLocationString = createAsyncThunk('locationStringSlice/fetchLocationString', async (coordinates: coordinatesType): Promise<object> => {
 

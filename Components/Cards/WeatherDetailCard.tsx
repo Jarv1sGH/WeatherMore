@@ -1,13 +1,9 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
 import { styles } from '../../Styles/WeatherStyles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-interface WeatherDetailCardProps {
-  icon: IconProp;
-  name: string;
-  value: string;
-}
+import { WeatherDetailCardProps } from '../../utils/Types';
+
 const WeatherDetailCard: React.FC<WeatherDetailCardProps> = ({
   icon,
   name,

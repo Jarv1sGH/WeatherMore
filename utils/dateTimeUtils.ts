@@ -1,4 +1,5 @@
-import { hourType } from "../ReduxToolkit/Reducers/hourlyWeatherSlice";
+import { hourType } from "./Types";
+
 const { DateTime } = require('luxon');
 
 

@@ -1,4 +1,4 @@
-import { Text, View, Image, ImageBackground } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { styles } from '../Styles/WeatherStyles';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -14,27 +14,19 @@ import WeatherDetailCard from './Cards/WeatherDetailCard';
 import HourlyForecast from './Cards/HourlyForecast';
 import WeekForecast from './Cards/WeekForecast';
 import RainChance from './Cards/RainChanceCard';
-import { weatherObjType } from '../ReduxToolkit/Reducers/currentWeatherSlice';
 import {
   capitalizeFirstLetter,
   timeStringConvertor,
   tomorrowHoursExtractor,
 } from '../utils/dateTimeUtils';
 import { useAppSelector } from '../ReduxToolkit/hooks';
-import { hourType } from '../ReduxToolkit/Reducers/hourlyWeatherSlice';
 import { IconSelector } from '../utils/iconUtils';
-import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg'
+import Svg, { Rect, LinearGradient, Stop } from 'react-native-svg'
+import { hourType, weatherDataType, weatherObjType } from '../utils/Types';
 const WeatherDetailCardMemoized = React.memo(WeatherDetailCard);
 const HourlyForecastMemoized = React.memo(HourlyForecast);
 const RainChanceMemoized = React.memo(RainChance);
 const WeekForecastMemoized = React.memo(WeekForecast);
-
-
-type weatherDataType = {
-  name: string;
-  value: string;
-  icon: IconProp;
-};
 
 export default function Weather({ weatherData }: { weatherData: weatherObjType }) {
   const { locationData } = useAppSelector(state => state.locationReducer);
@@ -100,7 +92,7 @@ export default function Weather({ weatherData }: { weatherData: weatherObjType }
   const weatherDetailCardData: Array<weatherDataType> = [
     {
       name: 'Wind Speed',
-      value: `${weatherData?.windSpeed} km/h`,
+      value: weatherData?.windDirString === undefined ? `${weatherData?.windSpeed} km/h` : `${weatherData?.windSpeed} km/h , ${weatherData?.windDirString}`,
       icon: faWind,
     },
     {

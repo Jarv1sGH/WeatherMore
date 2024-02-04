@@ -5,8 +5,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faClock} from '@fortawesome/free-regular-svg-icons';
 import {useAppSelector} from '../../ReduxToolkit/hooks';
 import {timeStringConvertor} from '../../utils/dateTimeUtils';
-import {hourType} from '../../ReduxToolkit/Reducers/hourlyWeatherSlice';
 import {IconSelector} from '../../utils/iconUtils';
+import { hourType } from '../../utils/Types';
 
 const HourlyForecast = ({hourCardData}: {hourCardData: Array<hourType>}) => {
   const {locationData} = useAppSelector(state => state.locationReducer);

@@ -1,16 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-type locationCoordsType = {
-  lat: number,
-  long: number
-}
-export type colorPaletteType = {
-  gradientColor1: string,
-  gradientColor2: string,
-  headerColor: string,
-  offset1: string,
-  offset2: string,
-}
+import { colorPaletteType, locationCoordsType } from '../../utils/Types';
 const componentSlice = createSlice({
   name: 'setComponent',
   initialState: {

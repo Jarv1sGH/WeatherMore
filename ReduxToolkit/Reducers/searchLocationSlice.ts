@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"; import axios from "axios";
 
 import { API_KEY } from "@env";
+import { LocationObjType } from "../../utils/Types";
 
 
 
@@ -24,17 +25,6 @@ export const searchLocation = createAsyncThunk('searchLocationSlice/searchLocati
         throw error;
     }
 })
-
-export type LocationObjType = {
-    id: number
-    name: string
-    country: string
-    timezone: string
-    language: string
-    adminArea: string
-    lon: number
-    lat: number
-}
 
 const searchLocationSlice = createSlice({
     name: 'daillyWeatherSlice',

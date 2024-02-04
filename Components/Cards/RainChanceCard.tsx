@@ -1,15 +1,15 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from '../../Styles/HourlyForecastStyles';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faCloudRain} from '@fortawesome/free-solid-svg-icons';
+import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { styles } from '../../Styles/HourlyForecastStyles';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCloudRain } from '@fortawesome/free-solid-svg-icons';
 import RangeIndicator from './Range';
-import {useAppSelector} from '../../ReduxToolkit/hooks';
-import {timeStringConvertor} from '../../utils/dateTimeUtils';
-import {hourType} from '../../ReduxToolkit/Reducers/hourlyWeatherSlice';
+import { useAppSelector } from '../../ReduxToolkit/hooks';
+import { timeStringConvertor } from '../../utils/dateTimeUtils';
+import { hourType } from '../../utils/Types';
 
-const RainChance = ({hourCardData}: {hourCardData: Array<hourType>}) => {
-  const {locationData} = useAppSelector(state => state.locationReducer);
+const RainChance = ({ hourCardData }: { hourCardData: Array<hourType> }) => {
+  const { locationData } = useAppSelector(state => state.locationReducer);
   const selectedForecast = useAppSelector(
     state => state.setState.selectedForecast,
   );

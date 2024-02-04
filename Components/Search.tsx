@@ -10,13 +10,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useAppDispatch, useAppSelector } from '../ReduxToolkit/hooks';
 import { setSearchClicked } from '../ReduxToolkit/Reducers/reducers';
 import {
-  LocationObjType,
   clearSearchData,
   searchLocation,
 } from '../ReduxToolkit/Reducers/searchLocationSlice';
 import {
   setLocationData,
 } from '../ReduxToolkit/Reducers/locationStringSlice';
+import { LocationObjType } from '../utils/Types';
 
 const Search = () => {
   const inputRef = useRef<TextInput>(null);

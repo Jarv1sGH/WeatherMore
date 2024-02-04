@@ -1,11 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { RangeIndicatorProps } from '../../utils/Types';
 
-type RangeIndicatorProps = {
-  minValue: number;
-  maxValue: number;
-  time: string;
-};
 const RangeIndicator: React.FC<RangeIndicatorProps> = ({
   minValue,
   maxValue,
@@ -17,7 +13,7 @@ const RangeIndicator: React.FC<RangeIndicatorProps> = ({
         <Text style={styles.rangeText}>{time}</Text>
         <View style={styles.rangeBar}>
           <View
-            style={[styles.rangeFill, {width: `${maxValue - minValue}%`}]}
+            style={[styles.rangeFill, { width: `${maxValue - minValue}%` }]}
           />
         </View>
         <Text style={styles.rangeText}>{maxValue}%</Text>

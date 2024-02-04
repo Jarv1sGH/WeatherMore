@@ -1,4 +1,5 @@
-import { DailyObjType } from "../ReduxToolkit/Reducers/dailyWeatherSlice";
+import { DailyObjType } from "./Types";
+
 export const createWeatherObj = (dailyData: DailyObjType) => {
     return {
         time: dailyData.date,

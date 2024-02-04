@@ -1,4 +1,4 @@
-import { colorPaletteType } from "../ReduxToolkit/Reducers/reducers";
+import { colorPaletteType } from "./Types";
 
 type weatherIconsObjType = {
     [key: string]: string

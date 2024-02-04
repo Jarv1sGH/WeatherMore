@@ -1,4 +1,3 @@
-// import Geolocation from '@react-native-community/geolocation';
 import Geolocation from 'react-native-geolocation-service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 

@@ -7,12 +7,12 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
-import {styles} from '../Styles/DailyForecastStyles';
-import {DailyObjType} from '../ReduxToolkit/Reducers/dailyWeatherSlice';
-import {useAppSelector} from '../ReduxToolkit/hooks';
-import {formatDateString, uvIndexString} from '../utils/dateTimeUtils';
-import {IconSelector} from '../utils/iconUtils';
+import React, { useState, useRef, useEffect } from 'react';
+import { styles } from '../Styles/DailyForecastStyles';
+import { useAppSelector } from '../ReduxToolkit/hooks';
+import { formatDateString, uvIndexString } from '../utils/dateTimeUtils';
+import { IconSelector } from '../utils/iconUtils';
+import { DailyObjType } from '../utils/Types';
 
 const DailyForecastCard = ({
   dailyDataObj,
@@ -52,15 +52,15 @@ const DailyForecastCard = ({
       <Animated.View
         style={[
           styles.dailyCardWrapper,
-          isLastCard && {marginBottom: 10},
+          isLastCard && { marginBottom: 10 },
           {
             height: cardHeight,
           },
         ]}>
         <View style={styles.dailyCardInner}>
-          <View style={{flexDirection: 'row', height: 65}}>
+          <View style={{ flexDirection: 'row', height: 65 }}>
             <View style={styles.cardLeft}>
-              <Text style={[styles.cardText, {color: '#262626'}]}>
+              <Text style={[styles.cardText, { color: '#262626' }]}>
                 {formattedDate}
               </Text>
               <Text style={styles.cardText}>{dailyDataObj.symbolPhrase}</Text>
@@ -82,13 +82,13 @@ const DailyForecastCard = ({
             </View>
           </View>
           <View style={styles.expandedView}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Text style={styles.cardText}>Wind</Text>
               <Text style={styles.cardText}>Humidity</Text>
               <Text style={styles.cardText}>UV Index</Text>
               <Text style={styles.cardText}>Sunrise/Sunset</Text>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Text style={[styles.cardText, styles.cardTextColor]}>
                 {dailyDataObj.maxWindSpeed} Kmph
               </Text>
@@ -119,13 +119,13 @@ export default function DailyForecast({
   refreshing: boolean;
   onRefresh: () => void;
 }) {
-  const {dailyWeather} = useAppSelector(state => state.dailyWeather);
+  const { dailyWeather } = useAppSelector(state => state.dailyWeather);
 
   return (
     <View style={styles.dailyWeatherContainer}>
       <FlatList
         data={dailyWeather.forecast.slice(0, 10)}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <DailyForecastCard
             key={item.date}
             dailyDataObj={item}

@@ -1,10 +1,7 @@
 import { API_KEY } from "@env";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"; import axios from "axios";
-// import { options } from "../../utils/ApiUtils";
-type FuncDataType = {
-    id: number,
-    timezone: string
-}
+import { FuncDataType, hourType } from "../../utils/Types";
+
 
 export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWeather', async (funcData: FuncDataType) => {
     const options = {
@@ -32,15 +29,6 @@ export const fetchHourWeather = createAsyncThunk('hourlyWeatherSlice/fetchHourWe
     }
 })
 
-export type hourType = {
-    time: string,
-    temperature: number,
-    symbol: string,
-    symbolPhrase: string,
-    windDirString: string,
-    windSpeed: number
-    precipProb: number
-}
 
 const hourlyWeatherSlice = createSlice({
     name: 'hourlyWeatherSlice',

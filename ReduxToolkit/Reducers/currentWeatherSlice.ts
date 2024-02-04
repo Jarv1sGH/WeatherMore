@@ -2,30 +2,8 @@ import { API_KEY } from "@env";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import axios from 'axios'
+import { FuncDataType, weatherObjType } from "../../utils/Types";
 
-type FuncDataType = {
-    id: number,
-    timezone: string
-}
-
-
-export interface weatherObjType {
-    time: string,
-    temperature: number,
-    symbol: string,
-    symbolPhrase: string,
-    sunrise?: string,
-    sunset?: string,
-    uvIndex: number,
-    dewPoint: number,
-    feelsLikeTemp: number,
-    precipProb: number,
-    pressure: number,
-    thunderProb?: number,
-    windSpeed: number,
-    windDirString?: string,
-    relHumidity: number,
-}
 
 interface currentWeatherType {
     current: weatherObjType

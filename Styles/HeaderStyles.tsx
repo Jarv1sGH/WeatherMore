@@ -1,7 +1,6 @@
 import { StyleSheet, Platform } from 'react-native';
 export const styles = StyleSheet.create({
   Header: {
-    // backgroundColor: '#749cd4',
     borderBottomLeftRadius: 2,
     borderBottomRightRadius: 2,
     ...Platform.select({
