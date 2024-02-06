@@ -7,7 +7,8 @@ const componentSlice = createSlice({
     searchClicked: false,
     locationCoords: {} as locationCoordsType,
     lastFetchTime: 0,
-    colorPalette: {} as colorPaletteType
+    colorPalette: {} as colorPaletteType,
+    loading: true,
   },
   reducers: {
     setSelectedForecast: (state, action) => {
@@ -25,8 +26,11 @@ const componentSlice = createSlice({
     setColorPalette: (state, action) => {
       state.colorPalette = action.payload;
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { setSelectedForecast, setSearchClicked, setLocationCoords, setLastFetchTime, setColorPalette } = componentSlice.actions;
+export const { setSelectedForecast, setSearchClicked, setLoading, setLocationCoords, setLastFetchTime, setColorPalette } = componentSlice.actions;
 export default componentSlice.reducer;

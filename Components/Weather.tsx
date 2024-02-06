@@ -1,7 +1,6 @@
 import { Text, View, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { styles } from '../Styles/WeatherStyles';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import {
   faCloudRain,
   faDroplet,
@@ -165,7 +164,7 @@ export default function Weather({ weatherData }: { weatherData: weatherObjType }
           </View>
         </View>
         <View style={styles.weatherDetailCardsWrapper}>
-          {weatherDetailCardData.map(item => (
+          {weatherData && weatherDetailCardData.map(item => (
             <WeatherDetailCardMemoized
               key={item.name}
               icon={item.icon}

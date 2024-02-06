@@ -1,5 +1,6 @@
 import Geolocation from 'react-native-geolocation-service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { setLoading } from '../ReduxToolkit/Reducers/reducers';
 
 export const checkLocationPermission = async (): Promise<boolean> => {
     const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -66,31 +67,33 @@ export const getIPLocation = async (): Promise<{ lat: number; long: number } | n
 
 
 //@ts-ignore 
-export  const handleLocationData = async (dispatch , setLocationCoords): Promise<void> => {
+export const handleLocationData = async (dispatch, setLocationCoords): Promise<void> => {
+    dispatch(setLoading(true));
     //Check for location permission
     const permissionGranted = await checkLocationPermission();
-
     const getLocationAndDipatch = async (): Promise<void> => {
-      const coordinates = await getLocationCoordinates();
-      if (coordinates === null) {
-        const ipCoords = await getIPLocation();
-        dispatch(setLocationCoords({...ipCoords}));
-      } else {
-        dispatch(setLocationCoords({...coordinates}));
-      }
+        const coordinates = await getLocationCoordinates();
+        if (coordinates === null) {
+            const ipCoords = await getIPLocation();
+            dispatch(setLocationCoords({ ...ipCoords }));
+        } else {
+            dispatch(setLocationCoords({ ...coordinates }));
+        }
     };
 
     if (permissionGranted) {
-      await getLocationAndDipatch();
-      return;
-    } else {
-      // if not granted then request for permission
-      const reqPermission = await requestLocationPermission();
-      if (reqPermission) {
         await getLocationAndDipatch();
-      } else {
-        const coordinates = await getIPLocation();
-        dispatch(setLocationCoords({...coordinates}));
-      }
+        return;
+    } else {
+        // if not granted then request for permission
+        const reqPermission = await requestLocationPermission();
+        if (reqPermission) {
+            await getLocationAndDipatch();
+            return;
+        } else {
+            const coordinates = await getIPLocation();
+            dispatch(setLocationCoords({ ...coordinates }));
+            return;
+        }
     }
-  };
+};

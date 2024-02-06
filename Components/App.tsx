@@ -18,6 +18,7 @@ import {
   setLastFetchTime,
   setLocationCoords,
   setSelectedForecast,
+  setLoading
 } from '../ReduxToolkit/Reducers/reducers';
 import { fetchLocationString } from '../ReduxToolkit/Reducers/locationStringSlice';
 import { fetchCurrentWeather } from '../ReduxToolkit/Reducers/currentWeatherSlice';
@@ -36,24 +37,26 @@ export default function App() {
   const [tomorrowWeatherData, setTomorrowWeatherData] =
     useState<weatherObjType | null>(null);
 
-  const { selectedForecast, lastFetchTime, searchClicked, locationCoords, colorPalette } =
+  const { selectedForecast, lastFetchTime, searchClicked, locationCoords, colorPalette, loading } =
     useAppSelector(state => state.setState);
   const { locationData } = useAppSelector(state => state.locationReducer);
   const { currentWeather } = useAppSelector(state => state.currentWeather);
   const { dailyWeather } = useAppSelector(state => state.dailyWeather);
-
+  // const [loading, setLoading] = useState(false)
   const fetchData = (): void => {
     if (locationData.id !== null && locationData.id !== undefined) {
       const funcData = {
         id: locationData.id,
         timezone: locationData.timezone,
       };
-      dispatch(fetchCurrentWeather(funcData));
+      dispatch(fetchCurrentWeather(funcData)).then(() => {
+        dispatch(setLoading(false));
+      });
       dispatch(fetchHourWeather(funcData));
 
       // To avoid being rate limited by Api
       setTimeout(() => {
-        dispatch(fetchDailyWeather(funcData.id));
+        dispatch(fetchDailyWeather(funcData.id))
       }, 500);
     }
 
@@ -83,10 +86,19 @@ export default function App() {
   }, [locationData]);
 
   useEffect(() => {
+    // Prevents Unnecessary calls to the API
     if (refreshing === true) {
-      fetchData();
+      // Checking if atleast one minute has passed since the last refresh
+      if (new Date().getTime() > (lastFetchTime + 60000)) {
+        fetchData();
+      }
+      else {
+        setRefreshing(false);
+        return;
+      }
     }
-  }, [refreshing]);
+  }, [refreshing, lastFetchTime]);
+
 
   useEffect(() => {
     const intervalDuration = 900000; // 15mins in milliseconds
@@ -110,7 +122,7 @@ export default function App() {
 
   useEffect(() => {
     if (selectedForecast === 'today') {
-      if (currentWeather.current.symbol) {
+      if (currentWeather?.current?.symbol !== undefined) {
         dispatch(setColorPalette(colorPaletteSetter(currentWeather.current.symbol)))
       }
     }
@@ -127,43 +139,48 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <StatusBar backgroundColor={searchClicked === true ? '#E1D3FA' : colorPalette.headerColor} barStyle={'dark-content'} />
-      {searchClicked === true ? (
-        <Search />
-      ) : (
-        <>
-          <Header />
-          <View style={styles.mainContainer}>
-            <ScrollView
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }>
-              {selectedForecast === 'today' && (
-                <React.Suspense fallback={<Loader />}>
-                  <WeatherMemoized weatherData={currentWeather?.current} />
-                </React.Suspense>
-              )}
 
-              {selectedForecast === 'tomorrow' && (
-                <React.Suspense fallback={<Loader />}>
-                  <WeatherMemoized
-                    weatherData={tomorrowWeatherData as weatherObjType}
-                  />
-                </React.Suspense>
-              )}
-            </ScrollView>
-            {selectedForecast === 'daily' && (
-              <View style={styles.forecastWrapper}>
-                <React.Suspense fallback={<Loader />}>
-                  <DailyForecastMemoized
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                </React.Suspense>
-              </View>
+      {
+        loading === true ? < Loader /> :
+          <>
+            {searchClicked === true ? (
+              <Search />
+            ) : (
+              <>
+                <Header />
+                <View style={styles.mainContainer}>
+                  <ScrollView
+                    refreshControl={
+                      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }>
+                    {selectedForecast === 'today' && (
+                      <React.Suspense fallback={<Loader />}>
+                        <WeatherMemoized weatherData={currentWeather?.current} />
+                      </React.Suspense>
+                    )}
+
+                    {selectedForecast === 'tomorrow' && (
+                      <React.Suspense fallback={<Loader />}>
+                        <WeatherMemoized
+                          weatherData={tomorrowWeatherData as weatherObjType}
+                        />
+                      </React.Suspense>
+                    )}
+                  </ScrollView>
+                  {selectedForecast === 'daily' && (
+                    <View style={styles.forecastWrapper}>
+                      <React.Suspense fallback={<Loader />}>
+                        <DailyForecastMemoized
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                        />
+                      </React.Suspense>
+                    </View>
+                  )}
+                </View>
+              </>
             )}
-          </View>
-        </>
-      )}
+          </>}
     </SafeAreaView>
   );
 }
